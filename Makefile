@@ -5,8 +5,8 @@ wit_files = $(sort $(shell find testdata -name '*.wit' ! -name '*.golden.*'))
 json: $(wit_files)
 
 .PHONY: $(wit_files)
-$(wit_files):
-	wasm-tools component wit -j --all-features $@ > $@.json
+$(wit_files): wit/wasm-tools.wasm
+	wasmtime --dir testdata wit/wasm-tools.wasm component wit -j --all-features $@ > $@.json
 
 # golden recompiles the .golden.wit test files.
 .PHONY: golden
@@ -26,6 +26,12 @@ clean:
 .PHONY: tests/generated
 tests/generated: json
 	go generate ./tests
+
+wit/wasm-tools.wasm:
+	cd wasmtools && \
+	git submodule update --init --recursive && \
+	cargo build --target wasm32-wasip1 --release --no-default-features -F component
+	mv wasmtools/wasm-tools.wasm wit/wasm-tools.wasm
 
 # test runs Go and TinyGo tests
 GOTESTARGS :=
