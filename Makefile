@@ -33,10 +33,9 @@ build: internal/wasmtools/wasm-tools.wasm
 	go build -o wit-bindgen-go ./cmd/wit-bindgen-go
 
 internal/wasmtools/wasm-tools.wasm:
-	cd wasmtools && \
-	git submodule update --init --recursive && \
-	cargo build --target wasm32-wasip1 --release --no-default-features -F component
-	mv wasmtools/target/wasm32-wasip1/release/wasm-tools.wasm $@
+	cd internal/wasmtools && \
+	cargo build --target wasm32-wasip1 --release -p wasm-tools
+	mv internal/wasmtools/target/wasm32-wasip1/release/wasm-tools.wasm $@
 
 # test runs Go and TinyGo tests
 GOTESTARGS :=
