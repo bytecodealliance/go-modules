@@ -27,11 +27,16 @@ clean:
 tests/generated: json
 	go generate ./tests
 
+# build builds the cmd/wit-bindgen-go binary
+.PHONY: build
+build: wit/wasm-tools.wasm
+	go build -o wit-bindgen-go ./cmd/wit-bindgen-go
+
 wit/wasm-tools.wasm:
 	cd wasmtools && \
 	git submodule update --init --recursive && \
 	cargo build --target wasm32-wasip1 --release --no-default-features -F component
-	mv wasmtools/wasm-tools.wasm wit/wasm-tools.wasm
+	mv wasmtools/target/wasm32-wasip1/release/wasm-tools.wasm wit/wasm-tools.wasm
 
 # test runs Go and TinyGo tests
 GOTESTARGS :=
