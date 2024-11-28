@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"go.bytecodealliance.org/internal/relpath"
+	"go.bytecodealliance.org/internal/wasmtools"
 
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
@@ -79,7 +80,7 @@ func TestGoldenWITRoundTrip(t *testing.T) {
 		return
 	}
 	ctx := context.Background()
-	wasmTools, err := NewWasmTools(ctx)
+	wasmTools, err := wasmtools.NewWasmTools(ctx)
 	if err != nil {
 		t.Skipf("wasm-tools not available: %v", err)
 		return

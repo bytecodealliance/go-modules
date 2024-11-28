@@ -1,4 +1,4 @@
-package wit
+package wasmtools
 
 import (
 	"bytes"

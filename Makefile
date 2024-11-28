@@ -5,8 +5,8 @@ wit_files = $(sort $(shell find testdata -name '*.wit' ! -name '*.golden.*'))
 json: $(wit_files)
 
 .PHONY: $(wit_files)
-$(wit_files): wit/wasm-tools.wasm
-	wasmtime --dir testdata wit/wasm-tools.wasm component wit -j --all-features $@ > $@.json
+$(wit_files): internal/wasmtools/wasm-tools.wasm
+	wasmtime --dir testdata internal/wasmtools/wasm-tools.wasm component wit -j --all-features $@ > $@.json
 
 # golden recompiles the .golden.wit test files.
 .PHONY: golden
@@ -29,10 +29,10 @@ tests/generated: json
 
 # build builds the cmd/wit-bindgen-go binary
 .PHONY: build
-build: wit/wasm-tools.wasm
+build: internal/wasmtools/wasm-tools.wasm
 	go build -o wit-bindgen-go ./cmd/wit-bindgen-go
 
-wit/wasm-tools.wasm:
+internal/wasmtools/wasm-tools.wasm:
 	cd wasmtools && \
 	git submodule update --init --recursive && \
 	cargo build --target wasm32-wasip1 --release --no-default-features -F component

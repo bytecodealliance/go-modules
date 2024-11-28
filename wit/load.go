@@ -7,6 +7,8 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+
+	"go.bytecodealliance.org/internal/wasmtools"
 )
 
 // LoadJSON loads a [WIT] JSON file from path.
@@ -60,7 +62,7 @@ func loadWIT(path string, reader io.Reader) (*Resolve, error) {
 	} else {
 		stdin = reader
 	}
-	wasmTools, err := NewWasmTools(ctx)
+	wasmTools, err := wasmtools.NewWasmTools(ctx)
 	if err != nil {
 		return nil, err
 	}
