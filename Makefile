@@ -36,7 +36,7 @@ wit/wasm-tools.wasm:
 	cd wasmtools && \
 	git submodule update --init --recursive && \
 	cargo build --target wasm32-wasip1 --release --no-default-features -F component
-	mv wasmtools/target/wasm32-wasip1/release/wasm-tools.wasm wit/wasm-tools.wasm
+	mv wasmtools/target/wasm32-wasip1/release/wasm-tools.wasm $@
 
 # test runs Go and TinyGo tests
 GOTESTARGS :=
