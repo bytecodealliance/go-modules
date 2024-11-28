@@ -1,3 +1,0 @@
-[submodule "wasmtools"]
-	path = wasmtools
-	url = https://github.com/bytecodealliance/wasm-tools
