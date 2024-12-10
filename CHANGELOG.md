@@ -2,6 +2,12 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Breaking: package [`cm`](https://pkg.go.dev/go.bytecodealliance.org/cm) is now a separate [module](https://go.dev/ref/mod). This change was made in order to minimize the runtime dependencies of programs that depend on package `cm` but not the rest of the packages in this module. To update your code that depends on package `cm`, run `go get -u go.bytecodealliance.org/...`.
+
 ## [v0.4.1] — 2024-12-09
 
 ### Added
