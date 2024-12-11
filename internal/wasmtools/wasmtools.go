@@ -22,12 +22,12 @@ type Executor interface {
 	Run(ctx context.Context, args []string, stdin io.Reader, fsMap map[fs.FS]string, name *string) (stdout io.Reader, stderr io.Reader, err error)
 }
 
-type WasmTools struct {
+type Instance struct {
 	runtime wazero.Runtime
 	module  wazero.CompiledModule
 }
 
-func NewWasmTools(ctx context.Context) (*WasmTools, error) {
+func New(ctx context.Context) (*Instance, error) {
 	c := wazero.NewRuntimeConfig().WithCloseOnContextDone(true)
 	r := wazero.NewRuntimeWithConfig(ctx, c)
 	if _, err := wasi_snapshot_preview1.Instantiate(ctx, r); err != nil {
@@ -39,14 +39,14 @@ func NewWasmTools(ctx context.Context) (*WasmTools, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error compiling wasm module: %w", err)
 	}
-	return &WasmTools{runtime: r, module: module}, nil
+	return &Instance{runtime: r, module: module}, nil
 }
 
-func (w *WasmTools) Close(ctx context.Context) error {
+func (w *Instance) Close(ctx context.Context) error {
 	return w.runtime.Close(ctx)
 }
 
-func (w *WasmTools) Run(ctx context.Context, args []string, stdin io.Reader, fsMap map[fs.FS]string, name *string) (stdout io.Reader, stderr io.Reader, err error) {
+func (w *Instance) Run(ctx context.Context, args []string, stdin io.Reader, fsMap map[fs.FS]string, name *string) (stdout io.Reader, stderr io.Reader, err error) {
 	stdoutBuffer := &bytes.Buffer{}
 	stderrBuffer := &bytes.Buffer{}
 

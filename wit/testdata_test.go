@@ -82,7 +82,7 @@ func TestGoldenWITRoundTrip(t *testing.T) {
 		return
 	}
 	ctx := context.Background()
-	wasmTools, err := wasmtools.NewWasmTools(ctx)
+	wasmTools, err := wasmtools.New(ctx)
 	if err != nil {
 		t.Skipf("wasm-tools not available: %v", err)
 		return
@@ -103,8 +103,10 @@ func TestGoldenWITRoundTrip(t *testing.T) {
 			if stderr != nil {
 				buf := new(bytes.Buffer)
 				buf.ReadFrom(stderr)
-				t.Error(buf.String())
-				return
+				if buf.Len() > 0 {
+					t.Error(buf.String())
+					return
+				}
 			}
 			// Parse the JSON into a Resolve.
 			res2, err := DecodeJSON(stdout)

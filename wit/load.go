@@ -64,7 +64,7 @@ func loadWIT(path string, reader io.Reader) (*Resolve, error) {
 	} else {
 		stdin = reader
 	}
-	wasmTools, err := wasmtools.NewWasmTools(ctx)
+	wasmTools, err := wasmtools.New(ctx)
 	if err != nil {
 		return nil, err
 	}
