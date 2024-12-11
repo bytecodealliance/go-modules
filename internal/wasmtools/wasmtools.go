@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"time"
 
 	"github.com/tetratelabs/wazero"
 	"github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
@@ -18,7 +19,7 @@ var wasmTools []byte
 
 // Executor is an interface for running Wasm modules.
 type Executor interface {
-	Run(ctx context.Context, args []string, stdin io.Reader, fsMap map[fs.FS]string, name *string) (stdout *bytes.Buffer, stderr *bytes.Buffer, err error)
+	Run(ctx context.Context, args []string, stdin io.Reader, fsMap map[fs.FS]string, name *string) (stdout io.Reader, stderr io.Reader, err error)
 }
 
 type WasmTools struct {
@@ -27,7 +28,8 @@ type WasmTools struct {
 }
 
 func NewWasmTools(ctx context.Context) (*WasmTools, error) {
-	r := wazero.NewRuntime(ctx)
+	c := wazero.NewRuntimeConfig().WithCloseOnContextDone(true)
+	r := wazero.NewRuntimeWithConfig(ctx, c)
 	if _, err := wasi_snapshot_preview1.Instantiate(ctx, r); err != nil {
 		return nil, fmt.Errorf("error instantiating WASI: %w", err)
 	}
@@ -44,13 +46,13 @@ func (w *WasmTools) Close(ctx context.Context) error {
 	return w.runtime.Close(ctx)
 }
 
-func (w *WasmTools) Run(ctx context.Context, args []string, stdin io.Reader, fsMap map[fs.FS]string, name *string) (stdout *bytes.Buffer, stderr *bytes.Buffer, err error) {
-	stdout = &bytes.Buffer{}
-	stderr = &bytes.Buffer{}
+func (w *WasmTools) Run(ctx context.Context, args []string, stdin io.Reader, fsMap map[fs.FS]string, name *string) (stdout io.Reader, stderr io.Reader, err error) {
+	stdoutBuffer := &bytes.Buffer{}
+	stderrBuffer := &bytes.Buffer{}
 
 	config := wazero.NewModuleConfig().
-		WithStdout(stdout).
-		WithStderr(stderr).
+		WithStdout(stdoutBuffer).
+		WithStderr(stderrBuffer).
 		WithRandSource(rand.Reader).
 		WithSysNanosleep().
 		WithSysNanotime().
@@ -69,10 +71,14 @@ func (w *WasmTools) Run(ctx context.Context, args []string, stdin io.Reader, fsM
 	}
 	config = config.WithFSConfig(fsConfig)
 
+	// timeout to 10 seconds
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
 	_, err = w.runtime.InstantiateModule(ctx, w.module, config)
 	if err != nil {
 		return nil, nil, fmt.Errorf("error instantiating wasm module: %w", err)
 	}
 
-	return stdout, stderr, nil
+	return stdoutBuffer, stderrBuffer, nil
 }
