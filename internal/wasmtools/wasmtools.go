@@ -1,3 +1,6 @@
+//go:build !tinygo
+// +build !tinygo
+
 package wasmtools
 
 import (
@@ -16,11 +19,6 @@ import (
 
 //go:embed wasm-tools.wasm
 var wasmTools []byte
-
-// Executor is an interface for running Wasm modules.
-type Executor interface {
-	Run(ctx context.Context, args []string, stdin io.Reader, fsMap map[fs.FS]string, name *string) (stdout io.Reader, stderr io.Reader, err error)
-}
 
 type Instance struct {
 	runtime wazero.Runtime
