@@ -13,7 +13,7 @@ import (
 type Instance struct{}
 
 func New(ctx context.Context) (*Instance, error) {
-	return &Instance{}, nil
+	return &Instance{}, errors.New("wasm-tools functionality is disabled under TinyGo")
 }
 
 func (w *Instance) Close(ctx context.Context) error {
