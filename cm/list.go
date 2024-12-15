@@ -1,6 +1,15 @@
 package cm
 
-import "unsafe"
+import (
+	"bytes"
+	"encoding/json"
+	"unsafe"
+)
+
+// nullLiteral is the JSON representation of a null literal.
+// https://pkg.go.dev/encoding/json#Unmarshaler
+// By convention, to approximate the behavior of Unmarshal itself, Unmarshalers implement UnmarshalJSON([]byte("null")) as a no-op.
+var nullLiteral = []byte("null")
 
 // List represents a Component Model list.
 // The binary representation of list<T> is similar to a Go slice minus the cap field.
@@ -57,4 +66,49 @@ func (l list[T]) Data() *T {
 // TODO: should this return an int instead of a uintptr?
 func (l list[T]) Len() uintptr {
 	return l.len
+}
+
+// MarshalJSON implements json.Marshaler.
+func (l list[T]) MarshalJSON() ([]byte, error) {
+	s := l.Slice()
+
+	if s == nil {
+		return nullLiteral, nil
+	}
+
+	// NOTE(lxf): Go JSON Encoder will serialize []byte as base64.
+	// We override that behavior so all int types have the same serialization format.
+	// []uint8{1,2,3} -> [1,2,3]
+	// []uint32{1,2,3} -> [1,2,3]
+	return json.Marshal(sliceOf(s))
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (l *list[T]) UnmarshalJSON(data []byte) error {
+	if bytes.Equal(data, nullLiteral) {
+		return nil
+	}
+
+	var s []T
+	err := json.Unmarshal(data, &s)
+	if err != nil {
+		return err
+	}
+
+	l.data = unsafe.SliceData([]T(s))
+	l.len = uintptr(len(s))
+
+	return nil
+}
+
+type entry[T any] [1]T
+
+func (v entry[T]) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v[0])
+}
+
+type slice[T any] []entry[T]
+
+func sliceOf[S ~[]E, E any](s S) slice[E] {
+	return *(*slice[E])(unsafe.Pointer(&s))
 }
