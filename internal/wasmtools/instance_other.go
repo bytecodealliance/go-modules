@@ -11,10 +11,14 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"os"
+	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/tetratelabs/wazero"
 	"github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
+	"go.bytecodealliance.org/internal/module"
 )
 
 //go:embed wasm-tools.wasm.gz
@@ -31,7 +35,21 @@ var decompress = sync.OnceValues(func() ([]byte, error) {
 	return buf.Bytes(), err
 })
 
-var compilationCache = wazero.NewCompilationCache()
+var compilationCache = sync.OnceValue(func() wazero.CompilationCache {
+	// First try on-disk cache, so subsequent invocations can share cache
+	tmp := os.TempDir()
+	if tmp != "" {
+		rep := strings.NewReplacer(" ", "", "(", "", ")", "")
+		dir := filepath.Join(tmp, rep.Replace(module.Path()+"@"+module.Version()))
+		c, err := wazero.NewCompilationCacheWithDir(dir)
+		if err == nil {
+			return c
+		}
+	}
+
+	// Fall back to in-memory cache
+	return wazero.NewCompilationCache()
+})
 
 // Instance is a compiled wazero instance.
 type Instance struct {
@@ -43,7 +61,7 @@ type Instance struct {
 func New(ctx context.Context) (*Instance, error) {
 	c := wazero.NewRuntimeConfig().
 		WithCloseOnContextDone(true).
-		WithCompilationCache(compilationCache)
+		WithCompilationCache(compilationCache())
 
 	r := wazero.NewRuntimeWithConfig(ctx, c)
 	if _, err := wasi_snapshot_preview1.Instantiate(ctx, r); err != nil {
