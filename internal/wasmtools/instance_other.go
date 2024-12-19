@@ -107,13 +107,14 @@ func (w *Instance) Run(ctx context.Context, stdin io.Reader, stdout, stderr io.W
 		config = config.WithStderr(stderr)
 	}
 
-	if len(fsMap) != 0 {
-		fsConfig := wazero.NewFSConfig()
-		for guestPath, guestFS := range fsMap {
-			fsConfig = fsConfig.WithFSMount(guestFS, guestPath)
-		}
-		config = config.WithFSConfig(fsConfig)
+	// By default, the entire filesystem is open to the wasm-tools binary.
+	fsConfig := wazero.NewFSConfig().
+		WithDirMount("./", "./").
+		WithDirMount("/", "/")
+	for guestPath, guestFS := range fsMap {
+		fsConfig = fsConfig.WithFSMount(guestFS, guestPath)
 	}
+	config = config.WithFSConfig(fsConfig)
 
 	_, err := w.runtime.InstantiateModule(ctx, w.module, config)
 	return err

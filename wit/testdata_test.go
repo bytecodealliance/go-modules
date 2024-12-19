@@ -5,7 +5,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io/fs"
 	"os"
 	"strings"
 	"testing"
@@ -85,8 +84,7 @@ func TestGoldenWITRoundTrip(t *testing.T) {
 			args := []string{"component", "wit", "-j", "--all-features"}
 			stdin := strings.NewReader(data)
 			stdout := &bytes.Buffer{}
-			fsMap := make(map[string]fs.FS)
-			err := wasmTools.Run(ctx, stdin, stdout, nil, fsMap, args...)
+			err := wasmTools.Run(ctx, stdin, stdout, nil, nil, args...)
 			if err != nil {
 				t.Errorf("wasm-tools: %v", err)
 				return
