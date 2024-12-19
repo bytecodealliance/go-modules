@@ -6,7 +6,7 @@ json: $(wit_files)
 
 .PHONY: $(wit_files)
 $(wit_files): internal/wasmtools/wasm-tools.wasm
-	go run ./internal/cmd/wasm-tools component wit -j --all-features $@ > $@.json
+	wasm-tools component wit -j --all-features $@ > $@.json
 
 # golden recompiles the .golden.wit test files.
 .PHONY: golden
