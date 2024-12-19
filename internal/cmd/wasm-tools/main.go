@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io/fs"
 	"os"
 
 	"go.bytecodealliance.org/internal/wasmtools"
@@ -15,12 +16,16 @@ func main() {
 		exit(err)
 	}
 
+	fsMap := map[string]fs.FS{
+		"./": os.DirFS("./"),
+	}
+
 	var args []string
 	if len(os.Args) != 0 {
 		args = os.Args[1:]
 	}
 
-	err = wasmTools.Run(ctx, os.Stdin, os.Stdout, os.Stderr, nil, args...)
+	err = wasmTools.Run(ctx, os.Stdin, os.Stdout, os.Stderr, fsMap, args...)
 	if err != nil {
 		exit(err)
 	}

@@ -14,6 +14,7 @@ on:
 
 env:
   go-modules: ./... ./cm/...
+  wasm-tools-version: "1.219.1"
   wasmtime-version: "26.0.0"
 
 jobs:
@@ -131,6 +132,12 @@ jobs:
         with:
           tinygo-version: ${{ matrix.tinygo-version }}
 
+      # TinyGo needs wasm-tools for -target=wasip2
+      - name: Set up wasm-tools
+        uses: bytecodealliance/actions/wasm-tools/setup@v1
+        with:
+          version: ${{ env.wasm-tools-version }}
+
       - name: Set up Wasmtime
         uses: bytecodealliance/actions/wasmtime/setup@v1
         with:
@@ -138,11 +145,6 @@ jobs:
 
       - name: Add Go wasm exec to $PATH
         run: echo "$(go env GOROOT)/misc/wasm" >> $GITHUB_PATH
-
-      # TinyGo needs wasm-tools for -target=wasip2
-      # This installs our vendored WebAssembly version of wasm-tools
-      - name: Install wasm-tools
-        run: go install ./internal/cmd/wasm-tools
 
       - name: Regenerate Go
         run: make tests/generated
