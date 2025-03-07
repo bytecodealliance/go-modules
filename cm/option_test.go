@@ -1,6 +1,9 @@
 package cm
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
 func TestOption(t *testing.T) {
 	o1 := None[string]()
@@ -63,5 +66,62 @@ func TestOption(t *testing.T) {
 	}
 	if got, want := f("hello").Value(), "hello"; got != want {
 		t.Errorf("Value: %v, expected %v", got, want)
+	}
+}
+
+func TestOptionMarshalJSON(t *testing.T) {
+	type TestStruct struct {
+		Field Option[string] `json:"field"`
+	}
+
+	// Test marshaling None
+	ts1 := TestStruct{Field: None[string]()}
+	data1, err := json.Marshal(ts1)
+	if err != nil {
+		t.Fatalf("json.Marshal failed: %v", err)
+	}
+	expected1 := `{"field":null}`
+	if string(data1) != expected1 {
+		t.Errorf("json.Marshal: got %s, expected %s", data1, expected1)
+	}
+
+	// Test marshaling Some
+	ts2 := TestStruct{Field: Some("hello")}
+	data2, err := json.Marshal(ts2)
+	if err != nil {
+		t.Fatalf("json.Marshal failed: %v", err)
+	}
+	expected2 := `{"field":"hello"}`
+	if string(data2) != expected2 {
+		t.Errorf("json.Marshal: got %s, expected %s", data2, expected2)
+	}
+}
+
+func TestOptionUnmarshalJSON(t *testing.T) {
+	type TestStruct struct {
+		Field Option[string] `json:"field"`
+	}
+
+	// Test unmarshaling None
+	data1 := []byte(`{"field":null}`)
+	var ts1 TestStruct
+	if err := json.Unmarshal(data1, &ts1); err != nil {
+		t.Fatalf("json.Unmarshal failed: %v", err)
+	}
+	if got, want := ts1.Field.None(), true; got != want {
+		t.Errorf("ts1.Field.None: %t, expected %t", got, want)
+	}
+
+	// Test unmarshaling Some
+	data2 := []byte(`{"field":"hello"}`)
+	var ts2 TestStruct
+	if err := json.Unmarshal(data2, &ts2); err != nil {
+		t.Fatalf("json.Unmarshal failed: %v", err)
+	}
+	if got, want := ts2.Field.isSome, true; got != want {
+		t.Errorf("ts2.Field.Some: %t, expected %t", got, want)
+	}
+	if got, want := ts2.Field.Value(), "hello"; got != want {
+		t.Errorf("ts2.Field.Value: %v, expected %v", got, want)
 	}
 }
