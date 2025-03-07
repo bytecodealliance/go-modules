@@ -1,5 +1,7 @@
 package cm
 
+import "encoding/json"
+
 // Option represents a Component Model [option<T>] type.
 //
 // [option<T>]: https://component-model.bytecodealliance.org/design/wit.html#options
@@ -56,4 +58,26 @@ func (o option[T]) Value() T {
 		return zero
 	}
 	return o.some
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+func (o Option[T]) MarshalJSON() ([]byte, error) {
+	if !o.isSome {
+		return json.Marshal(nil)
+	}
+	return json.Marshal(o.Some())
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (o *Option[T]) UnmarshalJSON(data []byte) error {
+	if string(data) == "null" {
+		*o = None[T]()
+		return nil
+	}
+	var v T
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	*o = Some(v)
+	return nil
 }
