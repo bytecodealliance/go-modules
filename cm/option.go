@@ -60,15 +60,12 @@ func (o option[T]) Value() T {
 	return o.some
 }
 
-// MarshalJSON implements the json.Marshaler interface.
+// MarshalJSON implements the json.Marshaler interface for the public option type.
 func (o Option[T]) MarshalJSON() ([]byte, error) {
-	if !o.isSome {
-		return json.Marshal(nil)
-	}
 	return json.Marshal(o.Some())
 }
 
-// UnmarshalJSON implements the json.Unmarshaler interface.
+// UnmarshalJSON implements the json.Unmarshaler interface for the public option type.
 func (o *Option[T]) UnmarshalJSON(data []byte) error {
 	if string(data) == "null" {
 		*o = None[T]()
@@ -79,5 +76,24 @@ func (o *Option[T]) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = Some(v)
+	return nil
+}
+
+// MarshalJSON implements the json.Marshaler interface for the internal option type.
+func (o option[T]) MarshalJSON() ([]byte, error) {
+	return json.Marshal(o.Some())
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface for the internal option type.
+func (o *option[T]) UnmarshalJSON(data []byte) error {
+	if string(data) == "null" {
+		o = &option[T]{isSome: false}
+		return nil
+	}
+	var v T
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	o = &option[T]{isSome: true, some: v}
 	return nil
 }

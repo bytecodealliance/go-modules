@@ -112,16 +112,26 @@ func TestOptionUnmarshalJSON(t *testing.T) {
 		t.Errorf("ts1.Field.None: %t, expected %t", got, want)
 	}
 
-	// Test unmarshaling Some
-	data2 := []byte(`{"field":"hello"}`)
+	// Test unmarshaling None (not present)
+	data2 := []byte(`{}`)
 	var ts2 TestStruct
 	if err := json.Unmarshal(data2, &ts2); err != nil {
 		t.Fatalf("json.Unmarshal failed: %v", err)
 	}
-	if got, want := ts2.Field.isSome, true; got != want {
+	if got, want := ts2.Field.None(), true; got != want {
+		t.Errorf("ts1.Field.None: %t, expected %t", got, want)
+	}
+
+	// Test unmarshaling Some
+	data3 := []byte(`{"field":"hello"}`)
+	var ts3 TestStruct
+	if err := json.Unmarshal(data3, &ts3); err != nil {
+		t.Fatalf("json.Unmarshal failed: %v", err)
+	}
+	if got, want := ts3.Field.isSome, true; got != want {
 		t.Errorf("ts2.Field.Some: %t, expected %t", got, want)
 	}
-	if got, want := ts2.Field.Value(), "hello"; got != want {
+	if got, want := ts3.Field.Value(), "hello"; got != want {
 		t.Errorf("ts2.Field.Value: %v, expected %v", got, want)
 	}
 }
