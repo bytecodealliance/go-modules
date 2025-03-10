@@ -1,6 +1,7 @@
 module go.bytecodealliance.org
 
 go 1.22.0
+toolchain go1.23.7
 
 require (
 	github.com/coreos/go-semver v0.3.1
@@ -9,8 +10,8 @@ require (
 	github.com/tetratelabs/wazero v1.9.0
 	github.com/urfave/cli/v3 v3.0.0-beta1
 	go.bytecodealliance.org/cm v0.1.0
-	golang.org/x/mod v0.23.0
-	golang.org/x/tools v0.30.0
+	golang.org/x/mod v0.24.0
+	golang.org/x/tools v0.31.0
 )
 
 require (
@@ -19,6 +20,6 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/ulikunitz/xz v0.5.12 // indirect
-	golang.org/x/sync v0.11.0 // indirect
-	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/sync v0.12.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
 )
