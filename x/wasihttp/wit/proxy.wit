@@ -1,0 +1,8 @@
+package go:http@0.2.0;
+
+/// The `go:http/proxy` world implements a strict superset of `wasi:http/proxy`.
+world proxy {
+	include wasi:http/proxy@0.2.0;
+	include wasi:cli/command@0.2.0;
+}
+
