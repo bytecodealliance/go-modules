@@ -1,0 +1,19 @@
+package issues:dep1;
+
+world w {
+	import issues:dep2/gated-interface;
+}
+
+/// https://github.com/bytecodealliance/go-modules/issues/306
+package issues:issue306 {
+	world w {
+		import issues:dep2/gated-interface;
+	}
+}
+
+package issues:dep2 {
+	@unstable(feature = some-feature-gate)
+	interface gated-interface {
+		f: func(v: u64) -> s32;
+	}
+}
