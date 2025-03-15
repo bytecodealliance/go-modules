@@ -2387,7 +2387,7 @@ func (g *generator) newPackage(w *wit.World, i *wit.Interface, name string) (*ge
 		}
 		content, err := g.componentEmbed(witText)
 		if err != nil {
-			g.opts.logger.Errorf("WIT:\n%s\n\n", witText)
+			g.opts.logger.Errorf("Generated WIT for custom section:\n%s\n\n", witText)
 			return nil, err
 		}
 		componentType := &wasm.CustomSection{

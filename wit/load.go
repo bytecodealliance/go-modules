@@ -9,7 +9,9 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 
+	"github.com/tetratelabs/wazero/sys"
 	"go.bytecodealliance.org/internal/wasmtools"
 )
 
@@ -58,6 +60,7 @@ func loadWIT(path string, reader io.Reader) (*Resolve, error) {
 	var stdin io.Reader
 
 	if path != "" {
+		path = strings.TrimPrefix(path, "./")
 		args = append(args, path)
 		dir := filepath.Dir(path)
 		fsMap[dir] = os.DirFS(dir)
@@ -69,9 +72,13 @@ func loadWIT(path string, reader io.Reader) (*Resolve, error) {
 		return nil, err
 	}
 	stdout := &bytes.Buffer{}
-	err = wasmTools.Run(ctx, stdin, stdout, nil, fsMap, args...)
+	stderr := &bytes.Buffer{}
+	err = wasmTools.Run(ctx, stdin, stdout, stderr, fsMap, args...)
 	if err != nil {
-		return nil, fmt.Errorf("error executing wasm-tools: %w", err)
+		if _, ok := err.(*sys.ExitError); ok {
+			return nil, fmt.Errorf("wasm-tools: %s", stderr.String())
+		}
+		return nil, fmt.Errorf("wasm-tools: %w", err)
 	}
 	return DecodeJSON(stdout)
 }
