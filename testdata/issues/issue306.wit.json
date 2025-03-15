@@ -1,0 +1,80 @@
+{
+  "worlds": [
+    {
+      "name": "w",
+      "imports": {
+        "interface-0": {
+          "interface": {
+            "id": 0
+          }
+        }
+      },
+      "exports": {},
+      "package": 1
+    },
+    {
+      "name": "w",
+      "imports": {
+        "interface-0": {
+          "interface": {
+            "id": 0
+          }
+        }
+      },
+      "exports": {},
+      "package": 2
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "gated-interface",
+      "types": {},
+      "functions": {
+        "f": {
+          "name": "f",
+          "kind": "freestanding",
+          "params": [
+            {
+              "name": "v",
+              "type": "u64"
+            }
+          ],
+          "result": "s32"
+        }
+      },
+      "stability": {
+        "unstable": {
+          "feature": "some-feature-gate"
+        }
+      },
+      "package": 0
+    }
+  ],
+  "types": [],
+  "packages": [
+    {
+      "name": "issues:dep2",
+      "interfaces": {
+        "gated-interface": 0
+      },
+      "worlds": {}
+    },
+    {
+      "name": "issues:dep1",
+      "interfaces": {},
+      "worlds": {
+        "w": 0
+      }
+    },
+    {
+      "name": "issues:issue306",
+      "docs": {
+        "contents": "https://github.com/bytecodealliance/go-modules/issues/306"
+      },
+      "interfaces": {},
+      "worlds": {
+        "w": 1
+      }
+    }
+  ]
+}
