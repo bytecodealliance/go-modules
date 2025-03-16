@@ -74,7 +74,7 @@ func writeFile(t *testing.T, dir, pkgPath string, file *gen.File) {
 	}
 }
 
-var canGo = sync.OnceValue[bool](func() bool {
+var canGo = sync.OnceValue(func() bool {
 	err := exec.Command("go", "version").Run()
 	return err == nil
 })
