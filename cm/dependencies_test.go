@@ -1,4 +1,4 @@
-//go:build !wasm
+//go:build !wasip1 && !wasip2 && !tinygo
 
 package cm
 
@@ -15,11 +15,12 @@ func TestDependencies(t *testing.T) {
 	cmd.Stdout = stdout
 	err := cmd.Run()
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
+		return
 	}
 
 	got := strings.TrimSpace(stdout.String())
-	const want = "[errors structs unsafe]" // Should not include "encoding/json"
+	const want = "[structs unsafe]" // Should not include "encoding/json"
 	if got != want {
 		t.Errorf("Expected dependencies %s, got %s", want, got)
 	}
