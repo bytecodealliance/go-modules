@@ -1,0 +1,26 @@
+package issues:issue297;
+
+world w {
+	export i;
+}
+
+interface i {
+	record event {
+		uuid: string,
+		timestamp: s64,
+		timestamp-millis: s64,
+		timestamp-micros: s64,
+	}
+
+	record response {
+		method: http-method,
+		url: string,
+		body: string,
+	}
+
+	enum http-method { GET, PUT, POST, DELETE }
+
+	page: func(e: event) -> result<response, string>;
+	track: func(e: event) -> result<response, string>;
+	user: func(e: event) -> result<response, string>;
+}
