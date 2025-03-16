@@ -1,3 +1,5 @@
+//go:build !module.std
+
 package cm
 
 import (

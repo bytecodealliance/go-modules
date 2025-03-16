@@ -2,6 +2,12 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed
+
+- Fixed cyclical dependency on package `encoding/json` when package `cm` is used in TinyGo package `syscall`. Files that import `encoding/json` will have a `_json.go` suffix and can be excluded when this package is copied into `std`.
+
 ## [v0.2.0] — 2025-03-15
 
 ### Added
