@@ -2,7 +2,6 @@ package cm
 
 import (
 	"bytes"
-	"encoding/json"
 	"unsafe"
 )
 
@@ -76,9 +75,9 @@ func (l list[T]) MarshalJSON() ([]byte, error) {
 		// We override that behavior so all int types have the same serialization format.
 		// []uint8{1,2,3} -> [1,2,3]
 		// []uint32{1,2,3} -> [1,2,3]
-		return json.Marshal(sliceOf(s))
+		return jsonMarshal(sliceOf(s))
 	}
-	return json.Marshal(s)
+	return jsonMarshal(s)
 }
 
 type slice[T any] []entry[T]
@@ -90,7 +89,7 @@ func sliceOf[S ~[]E, E any](s S) slice[E] {
 type entry[T any] [1]T
 
 func (v entry[T]) MarshalJSON() ([]byte, error) {
-	return json.Marshal(v[0])
+	return jsonMarshal(v[0])
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
@@ -100,7 +99,7 @@ func (l *list[T]) UnmarshalJSON(data []byte) error {
 	}
 
 	var s []T
-	err := json.Unmarshal(data, &s)
+	err := jsonUnmarshal(data, &s)
 	if err != nil {
 		return err
 	}

@@ -9,6 +9,8 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+
+	_ "go.bytecodealliance.org/cm/json" // Imported for go:linkname
 )
 
 func TestListMethods(t *testing.T) {
