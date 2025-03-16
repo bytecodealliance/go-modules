@@ -192,7 +192,8 @@ func writeGoPackages(_ context.Context, cmd *cli.Command, cfg *config, packages 
 				continue
 			}
 
-			if err := os.WriteFile(path, content, cfg.outPerm); err != nil {
+			// Do not copy the directory and exec bit
+			if err := os.WriteFile(path, content, cfg.outPerm&0o666); err != nil {
 				return err
 			}
 		}
