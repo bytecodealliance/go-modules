@@ -31,8 +31,7 @@ func CaseUnmarshaler[T ~uint8 | ~uint16 | ~uint32](cases []string) func(v *T, te
 		if len(text) == 0 {
 			return errEmpty
 		}
-		s := string(text)
-		c, ok := m[s]
+		c, ok := m[string(text)]
 		if !ok {
 			return errNoMatchingCase
 		}
