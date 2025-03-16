@@ -44,7 +44,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        go-version: ["1.22", "1.23"]
+        go-version: ["1.23", "1.24"]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -77,8 +77,13 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        go-version: ["1.22", "1.23"]
-        tinygo-version: ["0.33.0", "0.34.0", "0.35.0"]
+        go-version: ["1.23", "1.24"]
+        tinygo-version: ["0.34.0", "0.35.0", "0.36.0"]
+        exclude:
+          - go-version: "1.24"
+            tinygo-version: "0.34.0"
+          - go-version: "1.24"
+            tinygo-version: "0.35.0"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -108,8 +113,13 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        go-version: ["1.22", "1.23"]
-        tinygo-version: ["0.33.0", "0.34.0", "0.35.0"]
+        go-version: ["1.23", "1.24"]
+        tinygo-version: ["0.34.0", "0.35.0", "0.36.0"]
+        exclude:
+          - go-version: "1.24"
+            tinygo-version: "0.34.0"
+          - go-version: "1.24"
+            tinygo-version: "0.35.0"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -138,7 +148,9 @@ jobs:
           version: ${{ env.wasmtime-version }}
 
       - name: Add Go wasm exec to $PATH
-        run: echo "$(go env GOROOT)/misc/wasm" >> $GITHUB_PATH
+        run: |
+          echo "$(go env GOROOT)/misc/wasm" >> $GITHUB_PATH
+          echo "$(go env GOROOT)/lib/wasm" >> $GITHUB_PATH
 
       - name: Regenerate Go
         run: make tests/generated
@@ -158,8 +170,7 @@ jobs:
       - name: Test wasm/wasip2 with TinyGo
         run: tinygo test -v -target=wasip2 ${{ env.go-modules }}
 
-      - name: Test generated Go with TinyGo >= 0.34.0
-        if: ${{ matrix.tinygo-version != '0.33.0' }}
+      - name: Test generated Go with TinyGo
         run: tinygo test -v -target wasip2 ./tests/...
 
       - name: Verify repo is unchanged

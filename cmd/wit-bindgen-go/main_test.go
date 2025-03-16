@@ -1,3 +1,6 @@
+// TODO: Remove the following go:build line when TinyGo supports Go 1.24.
+//go:build !(tinygo && go1.24)
+
 package main
 
 import (
