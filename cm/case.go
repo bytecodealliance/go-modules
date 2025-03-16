@@ -1,7 +1,5 @@
 package cm
 
-import "errors"
-
 // CaseUnmarshaler returns an function that can unmarshal text into
 // [variant] or [enum] case T.
 //
@@ -33,8 +31,7 @@ func CaseUnmarshaler[T ~uint8 | ~uint16 | ~uint32](cases []string) func(v *T, te
 		if len(text) == 0 {
 			return errEmpty
 		}
-		s := string(text)
-		c, ok := m[s]
+		c, ok := m[string(text)]
 		if !ok {
 			return errNoMatchingCase
 		}
@@ -46,6 +43,14 @@ func CaseUnmarshaler[T ~uint8 | ~uint16 | ~uint32](cases []string) func(v *T, te
 const linearScanThreshold = 16
 
 var (
-	errEmpty          = errors.New("empty text")
-	errNoMatchingCase = errors.New("no matching case")
+	errEmpty          = &stringError{"empty text"}
+	errNoMatchingCase = &stringError{"no matching case"}
 )
+
+type stringError struct {
+	err string
+}
+
+func (err *stringError) Error() string {
+	return err.err
+}
