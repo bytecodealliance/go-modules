@@ -12,21 +12,17 @@ Package `wit/bindgen` contains code to generate Go bindings for [Component Model
 
 Package `cm` contains helper types and functions used by generated packages, such as `option<t>`, `result<ok, err>`, `variant`, `list`, and `resource`. These are intended for use by generated [Component Model](https://github.com/WebAssembly/component-model/blob/main/design/mvp/Explainer.md#type-definitions) bindings, where the caller converts to a Go equivalent. It attempts to map WIT semantics to their equivalent in Go where possible.
 
-#### Note on Memory Safety
-
-Package `cm` and generated bindings from `wit-bindgen-go` may have compatibility issues with the Go garbage collector, as they directly represent `variant` and `result` types as tagged unions where a pointer shape may be occupied by a non-pointer value. The GC may detect and throw an error if it detects a non-pointer value in an area it expects to see a pointer. This is an area of active development.
-
 ## `wit-bindgen-go`
 
 ### WIT → Go
 
-The `wit-bindgen-go` tool can generate Go bindings for WIT interfaces and worlds. If [`wasm-tools`](https://crates.io/crates/wasm-tools) is installed and in `$PATH`, then `wit-bindgen-go` can load WIT directly.
+`wit-bindgen-go` generates Go bindings for WIT interfaces and worlds. It generates a Go package for each WIT world and interface, with the necessary types, functions, methods, and ABI glue code. Generated code will depend on package `cm` for core Component Model types like `list<t>`.
 
 ```console
 wit-bindgen-go generate ../wasi-cli/wit
 ```
 
-Otherwise, pass the JSON representation of a fully-resolved WIT package:
+It also supports the [JSON representation](https://github.com/bytecodealliance/wasm-tools/pull/1203) of a fully-resolved WIT package:
 
 ```console
 wit-bindgen-go generate wasi-cli.wit.json
@@ -59,6 +55,10 @@ This will emit JSON on `stdout`, which can be piped to a file or another program
 ```console
 wasm-tools component wit -j --all-features example.wit > example.wit.json
 ```
+
+## Memory Safety and Garbage Collection
+
+Package `cm` and generated bindings from `wit-bindgen-go` may have compatibility issues with the Go garbage collector. This is due to the memory representation of `variant` and `result` types as tagged unions where a pointer shape may be occupied by a non-pointer value. In Go (but not TinyGo), the GC may detect and throw an error if it detects a non-pointer value in an area it expects to see a pointer. This is an area of active development.
 
 ## License
 
