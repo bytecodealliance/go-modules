@@ -35,7 +35,7 @@ func NewList[T any, Len AnyInteger](data *T, len Len) List[T] {
 // The underlying slice data is not copied, and the resulting List points at the
 // same array storage as the slice.
 func ToList[S ~[]T, T any](s S) List[T] {
-	return NewList[T](unsafe.SliceData([]T(s)), uintptr(len(s)))
+	return NewList(unsafe.SliceData([]T(s)), uintptr(len(s)))
 }
 
 // list represents the internal representation of a Component Model list.
