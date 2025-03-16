@@ -1,0 +1,161 @@
+{
+  "worlds": [
+    {
+      "name": "w",
+      "imports": {},
+      "exports": {
+        "interface-0": {
+          "interface": {
+            "id": 0
+          }
+        }
+      },
+      "package": 0
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "i",
+      "types": {
+        "event": 0,
+        "http-method": 1,
+        "response": 2
+      },
+      "functions": {
+        "page": {
+          "name": "page",
+          "kind": "freestanding",
+          "params": [
+            {
+              "name": "e",
+              "type": 0
+            }
+          ],
+          "result": 3
+        },
+        "track": {
+          "name": "track",
+          "kind": "freestanding",
+          "params": [
+            {
+              "name": "e",
+              "type": 0
+            }
+          ],
+          "result": 3
+        },
+        "user": {
+          "name": "user",
+          "kind": "freestanding",
+          "params": [
+            {
+              "name": "e",
+              "type": 0
+            }
+          ],
+          "result": 3
+        }
+      },
+      "package": 0
+    }
+  ],
+  "types": [
+    {
+      "name": "event",
+      "kind": {
+        "record": {
+          "fields": [
+            {
+              "name": "uuid",
+              "type": "string"
+            },
+            {
+              "name": "timestamp",
+              "type": "s64"
+            },
+            {
+              "name": "timestamp-millis",
+              "type": "s64"
+            },
+            {
+              "name": "timestamp-micros",
+              "type": "s64"
+            }
+          ]
+        }
+      },
+      "owner": {
+        "interface": 0
+      }
+    },
+    {
+      "name": "http-method",
+      "kind": {
+        "enum": {
+          "cases": [
+            {
+              "name": "GET"
+            },
+            {
+              "name": "PUT"
+            },
+            {
+              "name": "POST"
+            },
+            {
+              "name": "DELETE"
+            }
+          ]
+        }
+      },
+      "owner": {
+        "interface": 0
+      }
+    },
+    {
+      "name": "response",
+      "kind": {
+        "record": {
+          "fields": [
+            {
+              "name": "method",
+              "type": 1
+            },
+            {
+              "name": "url",
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "owner": {
+        "interface": 0
+      }
+    },
+    {
+      "name": null,
+      "kind": {
+        "result": {
+          "ok": 2,
+          "err": "string"
+        }
+      },
+      "owner": null
+    }
+  ],
+  "packages": [
+    {
+      "name": "issues:issue297",
+      "interfaces": {
+        "i": 0
+      },
+      "worlds": {
+        "w": 0
+      }
+    }
+  ]
+}
