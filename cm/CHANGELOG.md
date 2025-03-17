@@ -2,6 +2,12 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Updated error handling to address a [build issue](https://github.com/tinygo-org/tinygo/issues/4810) in TinyGo.
+
 ## [v0.2.1] — 2025-03-16
 
 ### Fixed
