@@ -9,7 +9,7 @@ func CaseUnmarshaler[T ~uint8 | ~uint16 | ~uint32](cases []string) func(v *T, te
 	if len(cases) <= linearScanThreshold {
 		return func(v *T, text []byte) error {
 			if len(text) == 0 {
-				return errEmpty
+				return &emptyTextError{}
 			}
 			s := string(text)
 			for i := 0; i < len(cases); i++ {
@@ -18,7 +18,7 @@ func CaseUnmarshaler[T ~uint8 | ~uint16 | ~uint32](cases []string) func(v *T, te
 					return nil
 				}
 			}
-			return errNoMatchingCase
+			return &noMatchingCaseError{}
 		}
 	}
 
@@ -29,11 +29,11 @@ func CaseUnmarshaler[T ~uint8 | ~uint16 | ~uint32](cases []string) func(v *T, te
 
 	return func(v *T, text []byte) error {
 		if len(text) == 0 {
-			return errEmpty
+			return &emptyTextError{}
 		}
 		c, ok := m[string(text)]
 		if !ok {
-			return errNoMatchingCase
+			return &noMatchingCaseError{}
 		}
 		*v = c
 		return nil
@@ -42,15 +42,10 @@ func CaseUnmarshaler[T ~uint8 | ~uint16 | ~uint32](cases []string) func(v *T, te
 
 const linearScanThreshold = 16
 
-var (
-	errEmpty          = &stringError{"empty text"}
-	errNoMatchingCase = &stringError{"no matching case"}
-)
+type emptyTextError struct{}
 
-type stringError struct {
-	err string
-}
+func (*emptyTextError) Error() string { return "empty text" }
 
-func (err *stringError) Error() string {
-	return err.err
-}
+type noMatchingCaseError struct{}
+
+func (*noMatchingCaseError) Error() string { return "no matching case" }
