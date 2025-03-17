@@ -1,6 +1,7 @@
 package wit
 
 import (
+	"iter"
 	"slices"
 
 	"go.bytecodealliance.org/wit/iterate"
@@ -37,7 +38,7 @@ func (r *Resolve) Clone() *Resolve {
 // The sequence stops if yield returns false.
 //
 // [sequence]: https://github.com/golang/go/issues/61897
-func (r *Resolve) AllFunctions() iterate.Seq[*Function] {
+func (r *Resolve) AllFunctions() iter.Seq[*Function] {
 	return func(yield func(*Function) bool) {
 		var done bool
 		yield = iterate.Done(iterate.Once(yield), func() { done = true })

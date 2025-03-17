@@ -1,7 +1,8 @@
 package wit
 
 import (
-	"go.bytecodealliance.org/wit/iterate"
+	"iter"
+
 	"go.bytecodealliance.org/wit/ordered"
 )
 
@@ -49,7 +50,7 @@ func (i *Interface) Match(pattern string) bool {
 // The sequence stops if yield returns false.
 //
 // [sequence]: https://github.com/golang/go/issues/61897
-func (i *Interface) AllFunctions() iterate.Seq[*Function] {
+func (i *Interface) AllFunctions() iter.Seq[*Function] {
 	return func(yield func(*Function) bool) {
 		i.Functions.All()(func(_ string, f *Function) bool {
 			return yield(f)
