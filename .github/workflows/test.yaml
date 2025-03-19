@@ -144,11 +144,11 @@ jobs:
           version: ${{ env.wasmtime-version }}
 
       - name: Add Go wasm exec to $PATH
-        run: |
-          echo "$(go env GOROOT)/misc/wasm" >> $GITHUB_PATH
-          echo "$(go env GOROOT)/lib/wasm" >> $GITHUB_PATH
-          echo $GITHUB_PATH
-          echo $PATH
+        run: echo "$(go env GOROOT)/misc/wasm" >> $GITHUB_PATH
+
+      # This moved in Go 1.24: https://github.com/golang/go/issues/68024
+      - name: Add Go 1.24 wasm exec to $PATH
+        run: echo "$(go env GOROOT)/lib/wasm" >> $GITHUB_PATH
 
       - name: Regenerate Go
         run: make tests/generated
