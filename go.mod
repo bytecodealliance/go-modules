@@ -1,8 +1,6 @@
 module go.bytecodealliance.org
 
-go 1.23.0
-
-toolchain go1.24.0
+go 1.22.0
 
 require (
 	github.com/coreos/go-semver v0.3.1
