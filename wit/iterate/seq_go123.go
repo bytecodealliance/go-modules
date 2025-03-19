@@ -1,4 +1,4 @@
-//go:build !go1.23 || tinygo
+//go:build !go1.24 || tinygo
 
 package iterate
 
