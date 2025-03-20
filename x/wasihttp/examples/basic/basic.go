@@ -1,6 +1,7 @@
 // This example implements a basic web server.
 //
-// To run: `tinygo run -target=wasip2-http.json ./examples/basic`
+// working direcotry: "./x/wasihttp/examples"
+// To run: `tinygo run -target=wasip2-http.json ./basic`
 // Test /: `curl -v 'http://0.0.0.0:8080/'`
 // Test /error: `curl -v 'http://0.0.0.0:8080/error'`
 

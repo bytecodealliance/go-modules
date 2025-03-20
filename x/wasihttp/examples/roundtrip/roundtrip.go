@@ -1,7 +1,8 @@
 // This example is taken from https://github.com/dev-wasm/dev-wasm-go/blob/main/http/main.go
 // demonstrates how to use the wasihttp package to make HTTP requests using the `http.Client` interface.
 //
-// To run: `tinygo build -target=wasip2-roundtrip.json -o roundtrip.wasm ./examples/roundtrip`
+// working directory: "./x/wasihttp/examples"
+// To run: `tinygo build -target=wasip2-roundtrip.json -o roundtrip.wasm ./roundtrip`
 // Test: `wasmtime run -Shttp -Sinherit-network -Sinherit-env roundtrip.wasm`
 package main
 

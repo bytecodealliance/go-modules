@@ -1,7 +1,8 @@
 // This example implements a web server with a counter running in a goroutine.
 // This demonstrates instance reuse by the host.
 //
-// To run: `tinygo run -target=wasip2-http.json ./examples/counter`
+// working directory: "./x/wasihttp/examples"
+// To run: `tinygo run -target=wasip2-http.json ./counter`
 // Test /: `curl -v 'http://0.0.0.0:8080/'`
 
 package main

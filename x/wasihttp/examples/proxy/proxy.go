@@ -1,6 +1,7 @@
 // This example implements a reverse proxy that sends requests to postman-echo.com.
 //
-// To run: `tinygo run -target=wasip2-http.json ./examples/proxy`
+// working directory: "./x/wasihttp/examples"
+// To run: `tinygo run -target=wasip2-http.json ./proxy`
 // Test GET: `curl -v 'http://0.0.0.0:8080/get'`
 // Test POST: `curl -v -d hello 'http://0.0.0.0:8080/post'`
 
