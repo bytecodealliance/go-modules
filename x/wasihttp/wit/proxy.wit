@@ -1,8 +1,13 @@
 package go:http@0.2.0;
 
-/// The `go:http/proxy` world implements a strict superset of `wasi:http/proxy`.
+/// The `go:http/proxy` world implements a subset of `wasi:http/proxy`.
 world proxy {
-	include wasi:http/proxy@0.2.0;
-	include wasi:cli/command@0.2.0;
-}
+	import wasi:clocks/monotonic-clock@0.2.0;
+	import wasi:io/streams@0.2.0;
+	import wasi:io/error@0.2.0;
+	import wasi:io/poll@0.2.0;
 
+	import wasi:http/types@0.2.0;
+	import wasi:http/outgoing-handler@0.2.0;
+	export wasi:http/incoming-handler@0.2.0;
+}
