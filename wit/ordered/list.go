@@ -1,14 +1,12 @@
 package ordered
 
-import (
-	"go.bytecodealliance.org/wit/iterate"
-)
+import "iter"
 
 type list[K, V any] struct {
 	root element[K, V]
 }
 
-func (l *list[K, V]) all() iterate.Seq2[K, V] {
+func (l *list[K, V]) all() iter.Seq2[K, V] {
 	return func(yield func(k K, v V) bool) {
 		next := l.root.next
 		for e := next; e != nil; e = next {

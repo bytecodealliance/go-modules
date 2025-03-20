@@ -2,16 +2,15 @@ package wit
 
 import (
 	"fmt"
+	"iter"
 	"unsafe"
-
-	"go.bytecodealliance.org/wit/iterate"
 )
 
 // TypeOwner is the interface implemented by any type that can own a TypeDef,
 // currently [World] and [Interface].
 type TypeOwner interface {
 	Node
-	AllFunctions() iterate.Seq[*Function]
+	AllFunctions() iter.Seq[*Function]
 	WITPackage() *Package
 	isTypeOwner()
 }

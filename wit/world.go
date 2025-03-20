@@ -1,6 +1,8 @@
 package wit
 
 import (
+	"iter"
+
 	"go.bytecodealliance.org/wit/iterate"
 	"go.bytecodealliance.org/wit/ordered"
 )
@@ -62,7 +64,7 @@ func (w *World) HasInterface(i *Interface) bool {
 // The sequence stops if yield returns false.
 //
 // [sequence]: https://github.com/golang/go/issues/61897
-func (w *World) AllInterfaces() iterate.Seq2[string, *Interface] {
+func (w *World) AllInterfaces() iter.Seq2[string, *Interface] {
 	return func(yield func(string, *Interface) bool) {
 		w.AllItems()(func(name string, i WorldItem) bool {
 			if ref, ok := i.(*InterfaceRef); ok {
@@ -77,7 +79,7 @@ func (w *World) AllInterfaces() iterate.Seq2[string, *Interface] {
 // The sequence stops if yield returns false.
 //
 // [sequence]: https://github.com/golang/go/issues/61897
-func (w *World) AllTypeDefs() iterate.Seq2[string, *TypeDef] {
+func (w *World) AllTypeDefs() iter.Seq2[string, *TypeDef] {
 	return func(yield func(string, *TypeDef) bool) {
 		w.AllItems()(func(name string, i WorldItem) bool {
 			if t, ok := i.(*TypeDef); ok {
@@ -92,7 +94,7 @@ func (w *World) AllTypeDefs() iterate.Seq2[string, *TypeDef] {
 // The sequence stops if yield returns false.
 //
 // [sequence]: https://github.com/golang/go/issues/61897
-func (w *World) AllFunctions() iterate.Seq[*Function] {
+func (w *World) AllFunctions() iter.Seq[*Function] {
 	return func(yield func(*Function) bool) {
 		w.AllItems()(func(_ string, i WorldItem) bool {
 			if f, ok := i.(*Function); ok {
@@ -107,7 +109,7 @@ func (w *World) AllFunctions() iterate.Seq[*Function] {
 // The sequence stops if yield returns false.
 //
 // [sequence]: https://github.com/golang/go/issues/61897
-func (w *World) AllItems() iterate.Seq2[string, WorldItem] {
+func (w *World) AllItems() iter.Seq2[string, WorldItem] {
 	return func(yield func(string, WorldItem) bool) {
 		var done bool
 		yield = iterate.Done2(iterate.Once2(yield), func() { done = true })
