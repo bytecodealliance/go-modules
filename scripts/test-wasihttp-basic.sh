@@ -9,6 +9,8 @@ echo "Running basic example with wasmtime..."
 wasmtime serve --addr 0.0.0.0:8088 -Scli basic.wasm &
 SERVER_PID=$!
 
+sleep 10
+
 echo "Testing / endpoint..."
 ROOT_RESPONSE=$(curl -s 'http://0.0.0.0:8088/')
 if [[ "$ROOT_RESPONSE" != "Hello world!"* ]]; then
