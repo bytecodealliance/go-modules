@@ -5,7 +5,12 @@
       "imports": {
         "interface-0": {
           "interface": {
-            "id": 0
+            "id": 0,
+            "stability": {
+              "stable": {
+                "since": "0.2.0"
+              }
+            }
           }
         }
       },
@@ -17,7 +22,12 @@
       "imports": {
         "interface-0": {
           "interface": {
-            "id": 0
+            "id": 0,
+            "stability": {
+              "stable": {
+                "since": "0.2.0"
+              }
+            }
           }
         }
       },
@@ -60,14 +70,14 @@
       "worlds": {}
     },
     {
-      "name": "issues:dep1",
+      "name": "issues:dep1@0.2.1",
       "interfaces": {},
       "worlds": {
         "w": 0
       }
     },
     {
-      "name": "issues:issue306",
+      "name": "issues:issue306@0.1.0",
       "docs": {
         "contents": "https://github.com/bytecodealliance/go-modules/issues/306"
       },

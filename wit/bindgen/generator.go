@@ -29,6 +29,7 @@ import (
 	"go.bytecodealliance.org/internal/wasmtools"
 	"go.bytecodealliance.org/wit"
 	"go.bytecodealliance.org/wit/logging"
+	"go.bytecodealliance.org/wit/ordered"
 )
 
 const (
@@ -166,7 +167,7 @@ func newGenerator(res *wit.Resolve, opts ...Option) (*generator, error) {
 		if g.world.Match(g.opts.world) {
 			break
 		}
-		// otherwise chose the last world
+		// otherwise choose the last world
 	}
 	g.wasmTools, err = wasmtools.New(context.Background())
 	if err != nil {
@@ -2439,10 +2440,25 @@ func synthesizeWorld(r *wit.Resolve, w *wit.World, name string) (*wit.Resolve, *
 	w = w.Clone()
 	w.Name = name
 	w.Docs = wit.Docs{}
+	// stripStability(w.Imports)
+	// stripStability(w.Exports)
 	w.Package.Worlds.Set(name, w)
 
 	r = r.Clone()
 	r.Worlds = append(r.Worlds, w)
 
 	return r, w
+}
+
+// Strip stability from world items for serialization.
+// https://github.com/bytecodealliance/go-modules/issues/306#issuecomment-2737873621
+func stripStability(items ordered.Map[string, wit.WorldItem]) {
+	items.All()(func(name string, i wit.WorldItem) bool {
+		if ref, ok := i.(*wit.InterfaceRef); ok {
+			ref2 := *ref
+			ref2.Stability = nil
+			items.Set(name, &ref2)
+		}
+		return true
+	})
 }
