@@ -1,12 +1,13 @@
 // https://github.com/bytecodealliance/go-modules/issues/306
-package issues:issue306;
+package issues:issue306@0.1.0;
 
 world w {
-    include issues:dep1/w;
+    include issues:dep1/w@0.2.1;
 }
 
-package issues:dep1 {
+package issues:dep1@0.2.1 {
 	world w {
+		@since(version = 0.2.0)
 		import issues:dep2/gated-interface;
 	}
 }

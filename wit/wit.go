@@ -116,6 +116,14 @@ func unwrap(s string) string {
 	return line
 }
 
+// newline returns either a blank string or a string with a newline.
+func newline(s string) string {
+	if s == "" {
+		return ""
+	}
+	return s + "\n"
+}
+
 // WITKind returns the WIT kind.
 func (*Resolve) WITKind() string { return "resolve" }
 
@@ -156,8 +164,23 @@ func (*Stable) WITKind() string { return "@since" }
 // WIT returns the [WIT] text format for [Stable] s.
 //
 // [WIT]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md
-func (s *Stable) WIT(_ Node, _ string) string {
+func (s *Stable) WIT(ctx Node, _ string) string {
 	var b strings.Builder
+	var w *World
+	switch ctx := ctx.(type) {
+	case worldImport:
+		w = ctx.World
+	case worldExport:
+		w = ctx.World
+	case *World:
+		w = ctx
+	}
+	if w != nil && w.Package.Name.Version != nil {
+		pv := w.Package.Name.Version
+		if pv.LessThan(s.Since) {
+			return ""
+		}
+	}
 	b.WriteString("@since(version = ")
 	b.WriteString(s.Since.String())
 	b.WriteRune(')')
@@ -256,8 +279,7 @@ func (w *World) WIT(ctx Node, name string) string {
 	var b strings.Builder
 	b.WriteString(w.Docs.WIT(nil, ""))
 	if w.Stability != nil {
-		b.WriteString(w.Stability.WIT(nil, ""))
-		b.WriteRune('\n')
+		b.WriteString(newline(w.Stability.WIT(w, "")))
 	}
 	b.WriteString("world ")
 	b.WriteString(escape(name)) // TODO: compare to w.Name?
@@ -311,7 +333,7 @@ func (ref *InterfaceRef) WIT(ctx Node, name string) string {
 	if ref.Stability == nil {
 		return ref.Interface.WIT(ctx, name)
 	}
-	return ref.Stability.WIT(ctx, "") + "\n" + ref.Interface.WIT(ctx, name)
+	return newline(ref.Stability.WIT(ctx, "")) + ref.Interface.WIT(ctx, name)
 }
 
 // WITKind returns the WIT kind.
@@ -357,8 +379,7 @@ func (i *Interface) WIT(ctx Node, name string) string {
 	default: // e.g. *Package
 		b.WriteString(i.Docs.WIT(ctx, ""))
 		if i.Stability != nil {
-			b.WriteString(i.Stability.WIT(ctx, ""))
-			b.WriteRune('\n')
+			b.WriteString(newline(i.Stability.WIT(ctx, "")))
 		}
 		b.WriteString("interface ")
 		b.WriteString(escape(name))
@@ -455,8 +476,7 @@ func (t *TypeDef) WIT(ctx Node, name string) string {
 		var b strings.Builder
 		b.WriteString(t.Docs.WIT(ctx, ""))
 		if t.Stability != nil {
-			b.WriteString(t.Stability.WIT(ctx, ""))
-			b.WriteRune('\n')
+			b.WriteString(newline(t.Stability.WIT(ctx, "")))
 		}
 		b.WriteString(t.Kind.WIT(t, name))
 		constructor := t.Constructor()
@@ -1051,8 +1071,7 @@ func (f *Function) WIT(ctx Node, name string) string {
 	if ctx != nil {
 		b.WriteString(f.Docs.WIT(ctx, ""))
 		if f.Stability != nil {
-			b.WriteString(f.Stability.WIT(ctx, ""))
-			b.WriteRune('\n')
+			b.WriteString(newline(f.Stability.WIT(ctx, "")))
 		}
 	}
 	switch ctx.(type) {
