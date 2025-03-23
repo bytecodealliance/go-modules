@@ -71,7 +71,7 @@ func ParseType(s string) (Type, error) {
 	case "string":
 		return String{}, nil
 	case "error-context":
-		return &ErrorContext{}, nil
+		return ErrorContext{}, nil
 	}
 	return nil, fmt.Errorf("unknown primitive type %q", s)
 }

@@ -1,4 +1,3 @@
-// https://github.com/bytecodealliance/go-modules/issues/306
 package issues:issue306@0.1.0;
 
 world w {
