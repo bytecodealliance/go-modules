@@ -176,16 +176,6 @@ func newGenerator(res *wit.Resolve, opts ...Option) (*generator, error) {
 	return g, nil
 }
 
-// TODO: factor this out
-func findWorld(r *wit.Resolve, pattern string) *wit.World {
-	for _, w := range r.Worlds {
-		if w.Match(pattern) {
-			return w
-		}
-	}
-	return nil
-}
-
 func (g *generator) generate() ([]*gen.Package, error) {
 	g.detectVersionedPackages()
 	err := g.defineWorlds()
