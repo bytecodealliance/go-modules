@@ -237,6 +237,11 @@ func (g *generator) define(dir wit.Direction, v wit.Node) (defined bool) {
 func (g *generator) defineWorlds() error {
 	g.opts.logger.Infof("Generating Go for %d world(s)\n", len(g.res.Worlds))
 	for _, w := range g.res.Worlds {
+		// Define a Go package for every world, regardless of use
+		_, err := g.newPackage(w, nil, "")
+		if err != nil {
+			return err
+		}
 		if w == g.world || g.world == nil {
 			err := g.defineWorld(w)
 			if err != nil {
@@ -2293,7 +2298,12 @@ func (g *generator) cgoFileFor(owner wit.TypeOwner) *gen.File {
 }
 
 func (g *generator) packageFor(owner wit.TypeOwner) *gen.Package {
-	return g.witPackages[owner]
+	pkg := g.witPackages[owner]
+	if pkg == nil {
+		panic(fmt.Sprintf("BUG: nil package for wit.TypeOwner %s (%T: %p)",
+			owner.WITPackage().Name.String(), owner, owner))
+	}
+	return pkg
 }
 
 func (g *generator) newPackage(w *wit.World, i *wit.Interface, name string) (*gen.Package, error) {
