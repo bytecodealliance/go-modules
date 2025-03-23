@@ -1,0 +1,33 @@
+package issues:issue325;
+
+world w {
+	import issues:dep2/i@0.2.0;
+	@unstable(feature = active)
+	use issues:dep2/i@0.2.0.{r};
+}
+
+package issues:dep1@0.1.0 {
+	world w {
+		import issues:dep2/i@0.2.0;
+	}
+}
+
+package issues:unstable@0.1.0 {
+	world w {
+		@unstable(feature = active)
+		import issues:dep2/i@0.2.0;
+		@unstable(feature = active)
+		use issues:dep2/i@0.2.0.{r};
+	}
+}
+
+package issues:dep2@0.2.0 {
+	interface i {
+		resource r;
+	}
+
+	world w {
+		@since(version = 0.2.0)
+		import i;
+	}
+}

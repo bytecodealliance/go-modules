@@ -1,0 +1,143 @@
+{
+  "worlds": [
+    {
+      "name": "w",
+      "imports": {
+        "interface-0": {
+          "interface": {
+            "id": 0,
+            "stability": {
+              "stable": {
+                "since": "0.2.0"
+              }
+            }
+          }
+        }
+      },
+      "exports": {},
+      "package": 0
+    },
+    {
+      "name": "w",
+      "imports": {
+        "interface-0": {
+          "interface": {
+            "id": 0,
+            "stability": {
+              "stable": {
+                "since": "0.2.0"
+              }
+            }
+          }
+        }
+      },
+      "exports": {},
+      "package": 1
+    },
+    {
+      "name": "w",
+      "imports": {
+        "interface-0": {
+          "interface": {
+            "id": 0,
+            "stability": {
+              "unstable": {
+                "feature": "active"
+              }
+            }
+          }
+        },
+        "r": {
+          "type": 1
+        }
+      },
+      "exports": {},
+      "package": 2
+    },
+    {
+      "name": "w",
+      "imports": {
+        "interface-0": {
+          "interface": {
+            "id": 0,
+            "stability": {
+              "stable": {
+                "since": "0.2.0"
+              }
+            }
+          }
+        },
+        "r": {
+          "type": 1
+        }
+      },
+      "exports": {},
+      "package": 3
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "i",
+      "types": {
+        "r": 0
+      },
+      "functions": {},
+      "package": 0
+    }
+  ],
+  "types": [
+    {
+      "name": "r",
+      "kind": "resource",
+      "owner": {
+        "interface": 0
+      }
+    },
+    {
+      "name": "r",
+      "kind": {
+        "type": 0
+      },
+      "owner": {
+        "world": 2
+      },
+      "stability": {
+        "unstable": {
+          "feature": "active"
+        }
+      }
+    }
+  ],
+  "packages": [
+    {
+      "name": "issues:dep2@0.2.0",
+      "interfaces": {
+        "i": 0
+      },
+      "worlds": {
+        "w": 0
+      }
+    },
+    {
+      "name": "issues:dep1@0.1.0",
+      "interfaces": {},
+      "worlds": {
+        "w": 1
+      }
+    },
+    {
+      "name": "issues:unstable@0.1.0",
+      "interfaces": {},
+      "worlds": {
+        "w": 2
+      }
+    },
+    {
+      "name": "issues:issue325",
+      "interfaces": {},
+      "worlds": {
+        "w": 3
+      }
+    }
+  ]
+}
