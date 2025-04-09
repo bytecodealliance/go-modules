@@ -99,11 +99,11 @@ type generator struct {
 	// which affects the generated Go package paths.
 	versioned bool
 
-	// packages are Go packages indexed on Go package paths.
-	packages map[string]*gen.Package
+	// goPackages are Go goPackages indexed on Go package paths.
+	goPackages map[string]*gen.Package
 
-	// witPackages map wit.TypeOwner (World, Interface) to Go packages.
-	witPackages map[wit.TypeOwner]*gen.Package
+	// ownerGoPackages map wit.TypeOwner (World, Interface) to Go packages.
+	ownerGoPackages map[wit.TypeOwner]*gen.Package
 
 	// exportScopes map wit.TypeOwner to export scopes.
 	exportScopes map[wit.TypeOwner]gen.Scope
@@ -135,13 +135,13 @@ type generator struct {
 
 func newGenerator(res *wit.Resolve, opts ...Option) (*generator, error) {
 	g := &generator{
-		packages:       make(map[string]*gen.Package),
-		witPackages:    make(map[wit.TypeOwner]*gen.Package),
-		exportScopes:   make(map[wit.TypeOwner]gen.Scope),
-		moduleNames:    make(map[wit.TypeOwner]string),
-		shapes:         make(map[typeUse]string),
-		lowerFunctions: make(map[typeUse]function),
-		liftFunctions:  make(map[typeUse]function),
+		goPackages:      make(map[string]*gen.Package),
+		ownerGoPackages: make(map[wit.TypeOwner]*gen.Package),
+		exportScopes:    make(map[wit.TypeOwner]gen.Scope),
+		moduleNames:     make(map[wit.TypeOwner]string),
+		shapes:          make(map[typeUse]string),
+		lowerFunctions:  make(map[typeUse]function),
+		liftFunctions:   make(map[typeUse]function),
 	}
 	for i := 0; i < 2; i++ {
 		g.types[i] = make(map[*wit.TypeDef]*typeDecl)
@@ -176,27 +176,17 @@ func newGenerator(res *wit.Resolve, opts ...Option) (*generator, error) {
 	return g, nil
 }
 
-// TODO: factor this out
-func findWorld(r *wit.Resolve, pattern string) *wit.World {
-	for _, w := range r.Worlds {
-		if w.Match(pattern) {
-			return w
-		}
-	}
-	return nil
-}
-
 func (g *generator) generate() ([]*gen.Package, error) {
 	g.detectVersionedPackages()
 	err := g.defineWorlds()
 	if err != nil {
 		return nil, err
 	}
-	var packages []*gen.Package
-	for _, path := range codec.SortedKeys(g.packages) {
-		packages = append(packages, g.packages[path])
+	var goPackages []*gen.Package
+	for _, path := range codec.SortedKeys(g.goPackages) {
+		goPackages = append(goPackages, g.goPackages[path])
 	}
-	return packages, nil
+	return goPackages, nil
 }
 
 func (g *generator) detectVersionedPackages() {
@@ -237,6 +227,11 @@ func (g *generator) define(dir wit.Direction, v wit.Node) (defined bool) {
 func (g *generator) defineWorlds() error {
 	g.opts.logger.Infof("Generating Go for %d world(s)\n", len(g.res.Worlds))
 	for _, w := range g.res.Worlds {
+		// Define a Go package for every world, regardless of use
+		_, err := g.defineGoPackage(w, nil, "")
+		if err != nil {
+			return err
+		}
 		if w == g.world || g.world == nil {
 			err := g.defineWorld(w)
 			if err != nil {
@@ -256,7 +251,7 @@ func (g *generator) defineWorld(w *wit.World) error {
 
 	g.moduleNames[w] = id.String()
 
-	pkg, err := g.newPackage(w, nil, "")
+	pkg, err := g.defineGoPackage(w, nil, "")
 	if err != nil {
 		return err
 	}
@@ -326,7 +321,7 @@ func (g *generator) defineInterface(w *wit.World, dir wit.Direction, i *wit.Inte
 		g.moduleNames[i] = id.String()
 	}
 
-	pkg, err := g.newPackage(w, i, name)
+	pkg, err := g.defineGoPackage(w, i, name)
 	if err != nil {
 		return err
 	}
@@ -2245,20 +2240,20 @@ func (g *generator) abiFile(pkg *gen.Package) *gen.File {
 }
 
 func (g *generator) fileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.packageFor(owner)
+	pkg := g.goPackageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".wit.go")
 	file.GeneratedBy = g.opts.generatedBy
 	return file
 }
 
 func (g *generator) witFileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.packageFor(owner)
+	pkg := g.goPackageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".wit")
 	return file
 }
 
 func (g *generator) exportsFileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.packageFor(owner)
+	pkg := g.goPackageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".exports.go")
 	file.GeneratedBy = g.opts.generatedBy
 	if len(file.Header) == 0 {
@@ -2273,7 +2268,7 @@ func (g *generator) exportsFileFor(owner wit.TypeOwner) *gen.File {
 }
 
 func (g *generator) wasmFileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.packageFor(owner)
+	pkg := g.goPackageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".wasm.go")
 	file.GeneratedBy = g.opts.generatedBy
 	if len(file.Header) == 0 {
@@ -2283,7 +2278,7 @@ func (g *generator) wasmFileFor(owner wit.TypeOwner) *gen.File {
 }
 
 func (g *generator) cgoFileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.packageFor(owner)
+	pkg := g.goPackageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".cgo.go")
 	file.GeneratedBy = g.opts.generatedBy
 	if file.GoBuild == "" {
@@ -2292,11 +2287,16 @@ func (g *generator) cgoFileFor(owner wit.TypeOwner) *gen.File {
 	return file
 }
 
-func (g *generator) packageFor(owner wit.TypeOwner) *gen.Package {
-	return g.witPackages[owner]
+func (g *generator) goPackageFor(owner wit.TypeOwner) *gen.Package {
+	pkg := g.ownerGoPackages[owner]
+	if pkg == nil {
+		panic(fmt.Sprintf("BUG: nil package for wit.TypeOwner %s (%T: %p)",
+			owner.WITPackage().Name.String(), owner, owner))
+	}
+	return pkg
 }
 
-func (g *generator) newPackage(w *wit.World, i *wit.Interface, name string) (*gen.Package, error) {
+func (g *generator) defineGoPackage(w *wit.World, i *wit.Interface, name string) (*gen.Package, error) {
 	var owner wit.TypeOwner
 	var id wit.Ident
 
@@ -2324,7 +2324,7 @@ func (g *generator) newPackage(w *wit.World, i *wit.Interface, name string) (*ge
 	}
 
 	// Don’t create the same package twice
-	pkg := g.witPackages[owner]
+	pkg := g.ownerGoPackages[owner]
 	if pkg != nil {
 		return pkg, nil
 	}
@@ -2357,8 +2357,8 @@ func (g *generator) newPackage(w *wit.World, i *wit.Interface, name string) (*ge
 	}
 
 	pkg = gen.NewPackage(pkgPath + "#" + goName)
-	g.packages[pkg.Path] = pkg
-	g.witPackages[owner] = pkg
+	g.goPackages[pkg.Path] = pkg
+	g.ownerGoPackages[owner] = pkg
 	g.exportScopes[owner] = gen.NewScope(nil)
 	pkg.DeclareName("Exports")
 
