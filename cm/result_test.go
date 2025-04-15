@@ -13,11 +13,27 @@ var (
 )
 
 type resulter[OK, Err any] interface {
+	SetOK(OK)
+	SetErr(Err)
 	IsOK() bool
 	IsErr() bool
 	OK() *OK
 	Err() *Err
 	Result() (OK, Err, bool)
+}
+
+func TestResultSetOKSetErr(t *testing.T) {
+	var r Result[string, int32, string]
+
+	r.SetOK(12345)
+	if want, got := int32(12345), r.OK(); *got != want {
+		t.Errorf("OK(): %v, expected %v", got, want)
+	}
+
+	r.SetErr("error")
+	if want, got := "error", r.Err(); *got != want {
+		t.Errorf("Err(): %v, expected %v", got, want)
+	}
 }
 
 func TestResultOKOrErr(t *testing.T) {
