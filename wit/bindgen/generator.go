@@ -99,11 +99,11 @@ type generator struct {
 	// which affects the generated Go package paths.
 	versioned bool
 
-	// goPackages are Go goPackages indexed on Go package paths.
-	goPackages map[string]*gen.Package
+	// packages are Go packages indexed on Go package paths.
+	packages map[string]*gen.Package
 
-	// ownerGoPackages map wit.TypeOwner (World, Interface) to Go packages.
-	ownerGoPackages map[wit.TypeOwner]*gen.Package
+	// witPackages map wit.TypeOwner (World, Interface) to Go packages.
+	witPackages map[wit.TypeOwner]*gen.Package
 
 	// exportScopes map wit.TypeOwner to export scopes.
 	exportScopes map[wit.TypeOwner]gen.Scope
@@ -135,13 +135,13 @@ type generator struct {
 
 func newGenerator(res *wit.Resolve, opts ...Option) (*generator, error) {
 	g := &generator{
-		goPackages:      make(map[string]*gen.Package),
-		ownerGoPackages: make(map[wit.TypeOwner]*gen.Package),
-		exportScopes:    make(map[wit.TypeOwner]gen.Scope),
-		moduleNames:     make(map[wit.TypeOwner]string),
-		shapes:          make(map[typeUse]string),
-		lowerFunctions:  make(map[typeUse]function),
-		liftFunctions:   make(map[typeUse]function),
+		packages:       make(map[string]*gen.Package),
+		witPackages:    make(map[wit.TypeOwner]*gen.Package),
+		exportScopes:   make(map[wit.TypeOwner]gen.Scope),
+		moduleNames:    make(map[wit.TypeOwner]string),
+		shapes:         make(map[typeUse]string),
+		lowerFunctions: make(map[typeUse]function),
+		liftFunctions:  make(map[typeUse]function),
 	}
 	for i := 0; i < 2; i++ {
 		g.types[i] = make(map[*wit.TypeDef]*typeDecl)
@@ -182,11 +182,11 @@ func (g *generator) generate() ([]*gen.Package, error) {
 	if err != nil {
 		return nil, err
 	}
-	var goPackages []*gen.Package
-	for _, path := range codec.SortedKeys(g.goPackages) {
-		goPackages = append(goPackages, g.goPackages[path])
+	var packages []*gen.Package
+	for _, path := range codec.SortedKeys(g.packages) {
+		packages = append(packages, g.packages[path])
 	}
-	return goPackages, nil
+	return packages, nil
 }
 
 func (g *generator) detectVersionedPackages() {
@@ -2288,7 +2288,7 @@ func (g *generator) cgoFileFor(owner wit.TypeOwner) *gen.File {
 }
 
 func (g *generator) goPackageFor(owner wit.TypeOwner) *gen.Package {
-	pkg := g.ownerGoPackages[owner]
+	pkg := g.witPackages[owner]
 	if pkg == nil {
 		panic(fmt.Sprintf("BUG: nil package for wit.TypeOwner %s (%T: %p)",
 			owner.WITPackage().Name.String(), owner, owner))
@@ -2324,7 +2324,7 @@ func (g *generator) defineGoPackage(w *wit.World, i *wit.Interface, name string)
 	}
 
 	// Don’t create the same package twice
-	pkg := g.ownerGoPackages[owner]
+	pkg := g.witPackages[owner]
 	if pkg != nil {
 		return pkg, nil
 	}
@@ -2357,8 +2357,8 @@ func (g *generator) defineGoPackage(w *wit.World, i *wit.Interface, name string)
 	}
 
 	pkg = gen.NewPackage(pkgPath + "#" + goName)
-	g.goPackages[pkg.Path] = pkg
-	g.ownerGoPackages[owner] = pkg
+	g.packages[pkg.Path] = pkg
+	g.witPackages[owner] = pkg
 	g.exportScopes[owner] = gen.NewScope(nil)
 	pkg.DeclareName("Exports")
 
