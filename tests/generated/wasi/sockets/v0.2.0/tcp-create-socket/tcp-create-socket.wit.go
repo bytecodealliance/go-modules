@@ -4,7 +4,6 @@
 package tcpcreatesocket
 
 import (
-	"go.bytecodealliance.org/cm"
 	"tests/generated/wasi/sockets/v0.2.0/network"
 	"tests/generated/wasi/sockets/v0.2.0/tcp"
 )
@@ -61,7 +60,7 @@ type TCPSocket = tcp.TCPSocket
 //	error-code>
 //
 //go:nosplit
-func CreateTCPSocket(addressFamily IPAddressFamily) (result cm.Result[TCPSocket, TCPSocket, ErrorCode]) {
+func CreateTCPSocket(addressFamily IPAddressFamily) (result ResultTCPSocketErrorCode) {
 	addressFamily0 := (uint32)(addressFamily)
 	wasmimport_CreateTCPSocket((uint32)(addressFamily0), &result)
 	return

@@ -14,7 +14,7 @@ import (
 //	exit: func(status: result)
 //
 //go:nosplit
-func Exit(status cm.BoolResult) {
+func Exit(status Result) {
 	status0 := (uint32)(cm.BoolToU32(status))
 	wasmimport_Exit((uint32)(status0))
 	return

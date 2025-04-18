@@ -8,17 +8,67 @@ import (
 	"unsafe"
 )
 
+// ResultErrorCode represents the result "#".
+//
+//	result<_, error-code>
+type ResultErrorCode cm.Result[ErrorCode, struct{}, ErrorCode]
+
+// ResultOutputStreamErrorCode represents the imported result "#".
+//
+//	result<output-stream, error-code>
+type ResultOutputStreamErrorCode cm.Result[OutputStream, OutputStream, ErrorCode]
+
+// ResultDescriptorFlagsErrorCode represents the result "#".
+//
+//	result<descriptor-flags, error-code>
+type ResultDescriptorFlagsErrorCode cm.Result[DescriptorFlags, DescriptorFlags, ErrorCode]
+
+// ResultDescriptorTypeErrorCode represents the result "#".
+//
+//	result<descriptor-type, error-code>
+type ResultDescriptorTypeErrorCode cm.Result[DescriptorType, DescriptorType, ErrorCode]
+
 // MetadataHashValueShape is used for storage in variant or result types.
 type MetadataHashValueShape struct {
 	_     cm.HostLayout
 	shape [unsafe.Sizeof(MetadataHashValue{})]byte
 }
 
+// ResultMetadataHashValueErrorCode represents the result "#".
+//
+//	result<metadata-hash-value, error-code>
+type ResultMetadataHashValueErrorCode cm.Result[MetadataHashValueShape, MetadataHashValue, ErrorCode]
+
+// ResultDescriptorErrorCode represents the imported result "#".
+//
+//	result<descriptor, error-code>
+type ResultDescriptorErrorCode cm.Result[Descriptor, Descriptor, ErrorCode]
+
 // TupleListU8BoolShape is used for storage in variant or result types.
 type TupleListU8BoolShape struct {
 	_     cm.HostLayout
 	shape [unsafe.Sizeof(cm.Tuple[cm.List[uint8], bool]{})]byte
 }
+
+// ResultTupleListU8BoolErrorCode represents the result "#".
+//
+//	result<tuple<list<u8>, bool>, error-code>
+type ResultTupleListU8BoolErrorCode cm.Result[TupleListU8BoolShape, cm.Tuple[cm.List[uint8], bool], ErrorCode]
+
+// ResultDirectoryEntryStreamErrorCode represents the imported result "#".
+//
+//	result<directory-entry-stream, error-code>
+type ResultDirectoryEntryStreamErrorCode cm.Result[DirectoryEntryStream, DirectoryEntryStream, ErrorCode]
+
+// ResultInputStreamErrorCode represents the imported result "#".
+//
+//	result<input-stream, error-code>
+type ResultInputStreamErrorCode cm.Result[InputStream, InputStream, ErrorCode]
+
+// ResultStringErrorCode represents the result "#".
+//
+//	result<string, error-code>
+type ResultStringErrorCode cm.Result[string, string, ErrorCode]
 
 func lower_DateTime(v wallclock.DateTime) (f0 uint64, f1 uint32) {
 	f0 = (uint64)(v.Seconds)
@@ -43,8 +93,23 @@ type DescriptorStatShape struct {
 	shape [unsafe.Sizeof(DescriptorStat{})]byte
 }
 
+// ResultDescriptorStatErrorCode represents the result "#".
+//
+//	result<descriptor-stat, error-code>
+type ResultDescriptorStatErrorCode cm.Result[DescriptorStatShape, DescriptorStat, ErrorCode]
+
+// ResultFileSizeErrorCode represents the result "#".
+//
+//	result<filesize, error-code>
+type ResultFileSizeErrorCode cm.Result[uint64, FileSize, ErrorCode]
+
 // OptionDirectoryEntryShape is used for storage in variant or result types.
 type OptionDirectoryEntryShape struct {
 	_     cm.HostLayout
 	shape [unsafe.Sizeof(cm.Option[DirectoryEntry]{})]byte
 }
+
+// ResultOptionDirectoryEntryErrorCode represents the result "#".
+//
+//	result<option<directory-entry>, error-code>
+type ResultOptionDirectoryEntryErrorCode cm.Result[OptionDirectoryEntryShape, cm.Option[DirectoryEntry], ErrorCode]

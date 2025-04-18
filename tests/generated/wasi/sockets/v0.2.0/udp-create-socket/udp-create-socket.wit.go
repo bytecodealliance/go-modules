@@ -4,7 +4,6 @@
 package udpcreatesocket
 
 import (
-	"go.bytecodealliance.org/cm"
 	"tests/generated/wasi/sockets/v0.2.0/network"
 	"tests/generated/wasi/sockets/v0.2.0/udp"
 )
@@ -61,7 +60,7 @@ type UDPSocket = udp.UDPSocket
 //	error-code>
 //
 //go:nosplit
-func CreateUDPSocket(addressFamily IPAddressFamily) (result cm.Result[UDPSocket, UDPSocket, ErrorCode]) {
+func CreateUDPSocket(addressFamily IPAddressFamily) (result ResultUDPSocketErrorCode) {
 	addressFamily0 := (uint32)(addressFamily)
 	wasmimport_CreateUDPSocket((uint32)(addressFamily0), &result)
 	return

@@ -701,7 +701,7 @@ func (self Descriptor) ResourceDrop() {
 //	advise: func(offset: filesize, length: filesize, advice: advice) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) Advise(offset FileSize, length FileSize, advice Advice) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) Advise(offset FileSize, length FileSize, advice Advice) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	offset0 := (uint64)(offset)
 	length0 := (uint64)(length)
@@ -722,7 +722,7 @@ func (self Descriptor) Advise(offset FileSize, length FileSize, advice Advice) (
 //	append-via-stream: func() -> result<output-stream, error-code>
 //
 //go:nosplit
-func (self Descriptor) AppendViaStream() (result cm.Result[OutputStream, OutputStream, ErrorCode]) {
+func (self Descriptor) AppendViaStream() (result ResultOutputStreamErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_DescriptorAppendViaStream((uint32)(self0), &result)
 	return
@@ -737,7 +737,7 @@ func (self Descriptor) AppendViaStream() (result cm.Result[OutputStream, OutputS
 //	create-directory-at: func(path: string) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) CreateDirectoryAt(path string) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) CreateDirectoryAt(path string) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	path0, path1 := cm.LowerString(path)
 	wasmimport_DescriptorCreateDirectoryAt((uint32)(self0), (*uint8)(path0), (uint32)(path1), &result)
@@ -756,7 +756,7 @@ func (self Descriptor) CreateDirectoryAt(path string) (result cm.Result[ErrorCod
 //	get-flags: func() -> result<descriptor-flags, error-code>
 //
 //go:nosplit
-func (self Descriptor) GetFlags() (result cm.Result[DescriptorFlags, DescriptorFlags, ErrorCode]) {
+func (self Descriptor) GetFlags() (result ResultDescriptorFlagsErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_DescriptorGetFlags((uint32)(self0), &result)
 	return
@@ -778,7 +778,7 @@ func (self Descriptor) GetFlags() (result cm.Result[DescriptorFlags, DescriptorF
 //	get-type: func() -> result<descriptor-type, error-code>
 //
 //go:nosplit
-func (self Descriptor) GetType() (result cm.Result[DescriptorType, DescriptorType, ErrorCode]) {
+func (self Descriptor) GetType() (result ResultDescriptorTypeErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_DescriptorGetType((uint32)(self0), &result)
 	return
@@ -814,7 +814,7 @@ func (self Descriptor) IsSameObject(other Descriptor) (result bool) {
 //	new-path: string) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) LinkAt(oldPathFlags PathFlags, oldPath string, newDescriptor Descriptor, newPath string) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) LinkAt(oldPathFlags PathFlags, oldPath string, newDescriptor Descriptor, newPath string) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	oldPathFlags0 := (uint32)(oldPathFlags)
 	oldPath0, oldPath1 := cm.LowerString(oldPath)
@@ -849,7 +849,7 @@ func (self Descriptor) LinkAt(oldPathFlags PathFlags, oldPath string, newDescrip
 //	metadata-hash: func() -> result<metadata-hash-value, error-code>
 //
 //go:nosplit
-func (self Descriptor) MetadataHash() (result cm.Result[MetadataHashValueShape, MetadataHashValue, ErrorCode]) {
+func (self Descriptor) MetadataHash() (result ResultMetadataHashValueErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_DescriptorMetadataHash((uint32)(self0), &result)
 	return
@@ -866,7 +866,7 @@ func (self Descriptor) MetadataHash() (result cm.Result[MetadataHashValueShape, 
 //	error-code>
 //
 //go:nosplit
-func (self Descriptor) MetadataHashAt(pathFlags PathFlags, path string) (result cm.Result[MetadataHashValueShape, MetadataHashValue, ErrorCode]) {
+func (self Descriptor) MetadataHashAt(pathFlags PathFlags, path string) (result ResultMetadataHashValueErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	pathFlags0 := (uint32)(pathFlags)
 	path0, path1 := cm.LowerString(path)
@@ -899,7 +899,7 @@ func (self Descriptor) MetadataHashAt(pathFlags PathFlags, path string) (result 
 //	descriptor-flags) -> result<descriptor, error-code>
 //
 //go:nosplit
-func (self Descriptor) OpenAt(pathFlags PathFlags, path string, openFlags OpenFlags, flags DescriptorFlags) (result cm.Result[Descriptor, Descriptor, ErrorCode]) {
+func (self Descriptor) OpenAt(pathFlags PathFlags, path string, openFlags OpenFlags, flags DescriptorFlags) (result ResultDescriptorErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	pathFlags0 := (uint32)(pathFlags)
 	path0, path1 := cm.LowerString(path)
@@ -927,7 +927,7 @@ func (self Descriptor) OpenAt(pathFlags PathFlags, path string, openFlags OpenFl
 //	error-code>
 //
 //go:nosplit
-func (self Descriptor) Read(length FileSize, offset FileSize) (result cm.Result[TupleListU8BoolShape, cm.Tuple[cm.List[uint8], bool], ErrorCode]) {
+func (self Descriptor) Read(length FileSize, offset FileSize) (result ResultTupleListU8BoolErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	length0 := (uint64)(length)
 	offset0 := (uint64)(offset)
@@ -950,7 +950,7 @@ func (self Descriptor) Read(length FileSize, offset FileSize) (result cm.Result[
 //	read-directory: func() -> result<directory-entry-stream, error-code>
 //
 //go:nosplit
-func (self Descriptor) ReadDirectory() (result cm.Result[DirectoryEntryStream, DirectoryEntryStream, ErrorCode]) {
+func (self Descriptor) ReadDirectory() (result ResultDirectoryEntryStreamErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_DescriptorReadDirectory((uint32)(self0), &result)
 	return
@@ -970,7 +970,7 @@ func (self Descriptor) ReadDirectory() (result cm.Result[DirectoryEntryStream, D
 //	read-via-stream: func(offset: filesize) -> result<input-stream, error-code>
 //
 //go:nosplit
-func (self Descriptor) ReadViaStream(offset FileSize) (result cm.Result[InputStream, InputStream, ErrorCode]) {
+func (self Descriptor) ReadViaStream(offset FileSize) (result ResultInputStreamErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	offset0 := (uint64)(offset)
 	wasmimport_DescriptorReadViaStream((uint32)(self0), (uint64)(offset0), &result)
@@ -989,7 +989,7 @@ func (self Descriptor) ReadViaStream(offset FileSize) (result cm.Result[InputStr
 //	readlink-at: func(path: string) -> result<string, error-code>
 //
 //go:nosplit
-func (self Descriptor) ReadLinkAt(path string) (result cm.Result[string, string, ErrorCode]) {
+func (self Descriptor) ReadLinkAt(path string) (result ResultStringErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	path0, path1 := cm.LowerString(path)
 	wasmimport_DescriptorReadLinkAt((uint32)(self0), (*uint8)(path0), (uint32)(path1), &result)
@@ -1007,7 +1007,7 @@ func (self Descriptor) ReadLinkAt(path string) (result cm.Result[string, string,
 //	remove-directory-at: func(path: string) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) RemoveDirectoryAt(path string) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) RemoveDirectoryAt(path string) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	path0, path1 := cm.LowerString(path)
 	wasmimport_DescriptorRemoveDirectoryAt((uint32)(self0), (*uint8)(path0), (uint32)(path1), &result)
@@ -1024,7 +1024,7 @@ func (self Descriptor) RemoveDirectoryAt(path string) (result cm.Result[ErrorCod
 //	string) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) RenameAt(oldPath string, newDescriptor Descriptor, newPath string) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) RenameAt(oldPath string, newDescriptor Descriptor, newPath string) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	oldPath0, oldPath1 := cm.LowerString(oldPath)
 	newDescriptor0 := cm.Reinterpret[uint32](newDescriptor)
@@ -1043,7 +1043,7 @@ func (self Descriptor) RenameAt(oldPath string, newDescriptor Descriptor, newPat
 //	set-size: func(size: filesize) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) SetSize(size FileSize) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) SetSize(size FileSize) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	size0 := (uint64)(size)
 	wasmimport_DescriptorSetSize((uint32)(self0), (uint64)(size0), &result)
@@ -1062,7 +1062,7 @@ func (self Descriptor) SetSize(size FileSize) (result cm.Result[ErrorCode, struc
 //	new-timestamp) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) SetTimes(dataAccessTimestamp NewTimestamp, dataModificationTimestamp NewTimestamp) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) SetTimes(dataAccessTimestamp NewTimestamp, dataModificationTimestamp NewTimestamp) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	dataAccessTimestamp0, dataAccessTimestamp1, dataAccessTimestamp2 := lower_NewTimestamp(dataAccessTimestamp)
 	dataModificationTimestamp0, dataModificationTimestamp1, dataModificationTimestamp2 := lower_NewTimestamp(dataModificationTimestamp)
@@ -1083,7 +1083,7 @@ func (self Descriptor) SetTimes(dataAccessTimestamp NewTimestamp, dataModificati
 //	new-timestamp, data-modification-timestamp: new-timestamp) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) SetTimesAt(pathFlags PathFlags, path string, dataAccessTimestamp NewTimestamp, dataModificationTimestamp NewTimestamp) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) SetTimesAt(pathFlags PathFlags, path string, dataAccessTimestamp NewTimestamp, dataModificationTimestamp NewTimestamp) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	pathFlags0 := (uint32)(pathFlags)
 	path0, path1 := cm.LowerString(path)
@@ -1108,7 +1108,7 @@ func (self Descriptor) SetTimesAt(pathFlags PathFlags, path string, dataAccessTi
 //	stat: func() -> result<descriptor-stat, error-code>
 //
 //go:nosplit
-func (self Descriptor) Stat() (result cm.Result[DescriptorStatShape, DescriptorStat, ErrorCode]) {
+func (self Descriptor) Stat() (result ResultDescriptorStatErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_DescriptorStat((uint32)(self0), &result)
 	return
@@ -1128,7 +1128,7 @@ func (self Descriptor) Stat() (result cm.Result[DescriptorStatShape, DescriptorS
 //	error-code>
 //
 //go:nosplit
-func (self Descriptor) StatAt(pathFlags PathFlags, path string) (result cm.Result[DescriptorStatShape, DescriptorStat, ErrorCode]) {
+func (self Descriptor) StatAt(pathFlags PathFlags, path string) (result ResultDescriptorStatErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	pathFlags0 := (uint32)(pathFlags)
 	path0, path1 := cm.LowerString(path)
@@ -1148,7 +1148,7 @@ func (self Descriptor) StatAt(pathFlags PathFlags, path string) (result cm.Resul
 //	symlink-at: func(old-path: string, new-path: string) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) SymlinkAt(oldPath string, newPath string) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) SymlinkAt(oldPath string, newPath string) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	oldPath0, oldPath1 := cm.LowerString(oldPath)
 	newPath0, newPath1 := cm.LowerString(newPath)
@@ -1168,7 +1168,7 @@ func (self Descriptor) SymlinkAt(oldPath string, newPath string) (result cm.Resu
 //	sync: func() -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) Sync() (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) Sync() (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_DescriptorSync((uint32)(self0), &result)
 	return
@@ -1186,7 +1186,7 @@ func (self Descriptor) Sync() (result cm.Result[ErrorCode, struct{}, ErrorCode])
 //	sync-data: func() -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) SyncData() (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) SyncData() (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_DescriptorSyncData((uint32)(self0), &result)
 	return
@@ -1202,7 +1202,7 @@ func (self Descriptor) SyncData() (result cm.Result[ErrorCode, struct{}, ErrorCo
 //	unlink-file-at: func(path: string) -> result<_, error-code>
 //
 //go:nosplit
-func (self Descriptor) UnlinkFileAt(path string) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self Descriptor) UnlinkFileAt(path string) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	path0, path1 := cm.LowerString(path)
 	wasmimport_DescriptorUnlinkFileAt((uint32)(self0), (*uint8)(path0), (uint32)(path1), &result)
@@ -1224,7 +1224,7 @@ func (self Descriptor) UnlinkFileAt(path string) (result cm.Result[ErrorCode, st
 //	write: func(buffer: list<u8>, offset: filesize) -> result<filesize, error-code>
 //
 //go:nosplit
-func (self Descriptor) Write(buffer cm.List[uint8], offset FileSize) (result cm.Result[uint64, FileSize, ErrorCode]) {
+func (self Descriptor) Write(buffer cm.List[uint8], offset FileSize) (result ResultFileSizeErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	buffer0, buffer1 := cm.LowerList(buffer)
 	offset0 := (uint64)(offset)
@@ -1244,7 +1244,7 @@ func (self Descriptor) Write(buffer cm.List[uint8], offset FileSize) (result cm.
 //	write-via-stream: func(offset: filesize) -> result<output-stream, error-code>
 //
 //go:nosplit
-func (self Descriptor) WriteViaStream(offset FileSize) (result cm.Result[OutputStream, OutputStream, ErrorCode]) {
+func (self Descriptor) WriteViaStream(offset FileSize) (result ResultOutputStreamErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	offset0 := (uint64)(offset)
 	wasmimport_DescriptorWriteViaStream((uint32)(self0), (uint64)(offset0), &result)
@@ -1276,7 +1276,7 @@ func (self DirectoryEntryStream) ResourceDrop() {
 //	read-directory-entry: func() -> result<option<directory-entry>, error-code>
 //
 //go:nosplit
-func (self DirectoryEntryStream) ReadDirectoryEntry() (result cm.Result[OptionDirectoryEntryShape, cm.Option[DirectoryEntry], ErrorCode]) {
+func (self DirectoryEntryStream) ReadDirectoryEntry() (result ResultOptionDirectoryEntryErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_DirectoryEntryStreamReadDirectoryEntry((uint32)(self0), &result)
 	return
