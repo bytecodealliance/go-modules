@@ -391,11 +391,10 @@ func (g *generator) defineAnonymousType(file *gen.File, dir wit.Direction, t wit
 
 	switch td.Kind.(type) {
 	case *wit.Result:
-		println("!")
 		g.declareTypeDef(abiFile, dir, td, g.typeDefGoName(dir, td))
 		return g.defineTypeDef(dir, td, "")
 	default:
-		fmt.Printf("td.Kind.(type) = %T\n", td.Kind)
+		// fmt.Printf("td.Kind.(type) = %T\n", td.Kind)
 	}
 
 	return nil
