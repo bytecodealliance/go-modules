@@ -1674,6 +1674,14 @@ func (g *generator) declareFunction(owner wit.TypeOwner, dir wit.Direction, f *w
 		return fdecl, nil
 	}
 
+	// Define anonymous types
+	for _, p := range f.Params {
+		g.defineAnonymousType(file, tdir, p.Type)
+	}
+	for _, p := range f.Results {
+		g.defineAnonymousType(file, tdir, p.Type)
+	}
+
 	if dir == wit.Imported {
 		g.ensureParamImports(file, tdir, f.Params)
 		g.ensureParamImports(file, tdir, f.Results)
@@ -1776,14 +1784,6 @@ func (g *generator) defineImportedFunction(decl *funcDecl) error {
 	}
 
 	file := decl.goFunc.file
-
-	// Define anonymous types
-	for _, p := range decl.goFunc.params {
-		g.defineAnonymousType(file, p.dir, p.typ)
-	}
-	for _, p := range decl.goFunc.results {
-		g.defineAnonymousType(file, p.dir, p.typ)
-	}
 
 	// Bridging between Go and wasm function
 	callParams := slices.Clone(decl.wasmFunc.params)
@@ -1964,14 +1964,6 @@ func (g *generator) defineExportedFunction(decl *funcDecl) error {
 	}
 	file := decl.goFunc.file
 	scope := g.exportScopes[decl.owner]
-
-	// Define anonymous types
-	for _, p := range decl.goFunc.params {
-		g.defineAnonymousType(file, p.dir, p.typ)
-	}
-	for _, p := range decl.goFunc.results {
-		g.defineAnonymousType(file, p.dir, p.typ)
-	}
 
 	// Bridging between wasm and Go function
 	callParams := slices.Clone(decl.goFunc.params)
