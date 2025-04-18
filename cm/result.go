@@ -39,6 +39,40 @@ type result[Shape, OK, Err any] struct {
 	data  Shape // [unsafe.Sizeof(*(*Shape)(unsafe.Pointer(nil)))]byte
 }
 
+// OK returns an OK result with shape Shape and type OK and Err.
+// Pass Result[OK, OK, Err] or Result[Err, OK, Err] as the first type argument.
+func OK[R AnyResult[Shape, OK, Err], Shape, OK, Err any](ok OK) R {
+	var r Result[Shape, OK, Err]
+	r.validate()
+	r.isErr = ResultOK
+	*((*OK)(unsafe.Pointer(&r.data))) = ok
+	return R(r)
+}
+
+// Err returns an error result with shape Shape and type OK and Err.
+// Pass Result[OK, OK, Err] or Result[Err, OK, Err] as the first type argument.
+func Err[R AnyResult[Shape, OK, Err], Shape, OK, Err any](err Err) R {
+	var r Result[Shape, OK, Err]
+	r.validate()
+	r.isErr = ResultErr
+	*((*Err)(unsafe.Pointer(&r.data))) = err
+	return R(r)
+}
+
+// SetOK sets r to an OK result.
+func (r *result[Shape, OK, Err]) SetOK(ok OK) {
+	r.validate()
+	r.isErr = ResultOK
+	*((*OK)(unsafe.Pointer(&r.data))) = ok
+}
+
+// SetErr sets r to an error result.
+func (r *result[Shape, OK, Err]) SetErr(err Err) {
+	r.validate()
+	r.isErr = ResultErr
+	*((*Err)(unsafe.Pointer(&r.data))) = err
+}
+
 // IsOK returns true if r represents the OK case.
 func (r *result[Shape, OK, Err]) IsOK() bool {
 	r.validate()
@@ -106,24 +140,4 @@ func (r *result[Shape, OK, Err]) validate() {
 	if unsafe.Sizeof(shape) == 0 && unsafe.Sizeof(*r) != 1 {
 		panic("result: size of data type == 0, but result size != 1")
 	}
-}
-
-// OK returns an OK result with shape Shape and type OK and Err.
-// Pass Result[OK, OK, Err] or Result[Err, OK, Err] as the first type argument.
-func OK[R AnyResult[Shape, OK, Err], Shape, OK, Err any](ok OK) R {
-	var r Result[Shape, OK, Err]
-	r.validate()
-	r.isErr = ResultOK
-	*((*OK)(unsafe.Pointer(&r.data))) = ok
-	return R(r)
-}
-
-// Err returns an error result with shape Shape and type OK and Err.
-// Pass Result[OK, OK, Err] or Result[Err, OK, Err] as the first type argument.
-func Err[R AnyResult[Shape, OK, Err], Shape, OK, Err any](err Err) R {
-	var r Result[Shape, OK, Err]
-	r.validate()
-	r.isErr = ResultErr
-	*((*Err)(unsafe.Pointer(&r.data))) = err
-	return R(r)
 }
