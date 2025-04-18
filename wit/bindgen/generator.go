@@ -377,6 +377,30 @@ func (g *generator) defineInterface(w *wit.World, dir wit.Direction, i *wit.Inte
 	return nil
 }
 
+func (g *generator) defineAnonymousType(file *gen.File, dir wit.Direction, t wit.Type) error {
+	if t.TypeName() != "" {
+		return nil
+	}
+
+	td, ok := t.(*wit.TypeDef)
+	if !ok {
+		return nil
+	}
+
+	abiFile := g.abiFile(file.Package)
+
+	switch td.Kind.(type) {
+	case *wit.Result:
+		println("!")
+		g.declareTypeDef(abiFile, dir, td, g.typeDefGoName(dir, td))
+		return g.defineTypeDef(dir, td, "")
+	default:
+		fmt.Printf("td.Kind.(type) = %T\n", td.Kind)
+	}
+
+	return nil
+}
+
 func (g *generator) defineTypeDef(dir wit.Direction, t *wit.TypeDef, name string) error {
 	if !g.define(dir, t) {
 		return nil
@@ -1754,6 +1778,14 @@ func (g *generator) defineImportedFunction(decl *funcDecl) error {
 
 	file := decl.goFunc.file
 
+	// Define anonymous types
+	for _, p := range decl.goFunc.params {
+		g.defineAnonymousType(file, p.dir, p.typ)
+	}
+	for _, p := range decl.goFunc.results {
+		g.defineAnonymousType(file, p.dir, p.typ)
+	}
+
 	// Bridging between Go and wasm function
 	callParams := slices.Clone(decl.wasmFunc.params)
 	for i := range callParams {
@@ -1933,6 +1965,14 @@ func (g *generator) defineExportedFunction(decl *funcDecl) error {
 	}
 	file := decl.goFunc.file
 	scope := g.exportScopes[decl.owner]
+
+	// Define anonymous types
+	for _, p := range decl.goFunc.params {
+		g.defineAnonymousType(file, p.dir, p.typ)
+	}
+	for _, p := range decl.goFunc.results {
+		g.defineAnonymousType(file, p.dir, p.typ)
+	}
 
 	// Bridging between wasm and Go function
 	callParams := slices.Clone(decl.goFunc.params)
