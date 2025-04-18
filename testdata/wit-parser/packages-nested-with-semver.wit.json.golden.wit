@@ -1,13 +1,15 @@
-package foo:name@1.0.0;
+package foo:root;
 
-interface i1 {
-	type a = u32;
-}
+package foo:name@1.0.0 {
+	interface i1 {
+		type a = u32;
+	}
 
-world w1 {
-	import i1;
-	import imp1: interface {
-		use i1.{a};
+	world w1 {
+		import i1;
+		import imp1: interface {
+			use i1.{a};
+		}
 	}
 }
 
@@ -23,5 +25,3 @@ package foo:name@1.0.1 {
 		}
 	}
 }
-
-package foo:root {}

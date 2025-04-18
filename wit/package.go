@@ -59,6 +59,10 @@ func comparePackages(a, b *Package) int {
 	case DependsOn(b, a):
 		// fmt.Fprintln(os.Stderr, b.Name.String()+" depends on "+a.Name.String())
 		return -1
+	case a.Name.Version == nil && b.Name.Version != nil:
+		return 1
+	case a.Name.Version != nil && a.Name.Version == nil:
+		return -1
 	}
 	// fmt.Fprintln(os.Stderr, a.Name.String()+" does not depend on "+b.Name.String())
 	return -1 * strings.Compare(a.Name.String(), b.Name.String())

@@ -78,9 +78,6 @@
     },
     {
       "name": "issues:issue306@0.1.0",
-      "docs": {
-        "contents": "https://github.com/bytecodealliance/go-modules/issues/306"
-      },
       "interfaces": {},
       "worlds": {
         "w": 1
