@@ -1,0 +1,11 @@
+package test:test;
+
+interface i {
+	f1: func() -> result<bool, u8>;
+	f2: func() -> result<bool, u8>;
+	f3: func() -> result<bool, u8>;
+}
+
+world w {
+	import i;
+}
