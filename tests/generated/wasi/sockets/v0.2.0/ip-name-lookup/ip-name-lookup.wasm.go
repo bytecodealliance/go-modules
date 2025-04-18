@@ -2,10 +2,6 @@
 
 package ipnamelookup
 
-import (
-	"go.bytecodealliance.org/cm"
-)
-
 // This file contains wasmimport and wasmexport declarations for "wasi:sockets@0.2.0".
 
 //go:wasmimport wasi:sockets/ip-name-lookup@0.2.0 [resource-drop]resolve-address-stream
@@ -14,7 +10,7 @@ func wasmimport_ResolveAddressStreamResourceDrop(self0 uint32)
 
 //go:wasmimport wasi:sockets/ip-name-lookup@0.2.0 [method]resolve-address-stream.resolve-next-address
 //go:noescape
-func wasmimport_ResolveAddressStreamResolveNextAddress(self0 uint32, result *cm.Result[OptionIPAddressShape, cm.Option[IPAddress], ErrorCode])
+func wasmimport_ResolveAddressStreamResolveNextAddress(self0 uint32, result *ResultOptionIPAddressErrorCode)
 
 //go:wasmimport wasi:sockets/ip-name-lookup@0.2.0 [method]resolve-address-stream.subscribe
 //go:noescape
@@ -22,4 +18,4 @@ func wasmimport_ResolveAddressStreamSubscribe(self0 uint32) (result0 uint32)
 
 //go:wasmimport wasi:sockets/ip-name-lookup@0.2.0 resolve-addresses
 //go:noescape
-func wasmimport_ResolveAddresses(network0 uint32, name0 *uint8, name1 uint32, result *cm.Result[ResolveAddressStream, ResolveAddressStream, ErrorCode])
+func wasmimport_ResolveAddresses(network0 uint32, name0 *uint8, name1 uint32, result *ResultResolveAddressStreamErrorCode)

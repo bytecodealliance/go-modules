@@ -12,3 +12,13 @@ type OptionIPAddressShape struct {
 	_     cm.HostLayout
 	shape [unsafe.Sizeof(cm.Option[IPAddress]{})]byte
 }
+
+// ResultOptionIPAddressErrorCode represents the result "#".
+//
+//	result<option<ip-address>, error-code>
+type ResultOptionIPAddressErrorCode cm.Result[OptionIPAddressShape, cm.Option[IPAddress], ErrorCode]
+
+// ResultResolveAddressStreamErrorCode represents the imported result "#".
+//
+//	result<resolve-address-stream, error-code>
+type ResultResolveAddressStreamErrorCode cm.Result[ResolveAddressStream, ResolveAddressStream, ErrorCode]

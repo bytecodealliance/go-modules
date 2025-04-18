@@ -8,11 +8,26 @@ import (
 	"unsafe"
 )
 
+// ResultErrorCode represents the result "#".
+//
+//	result<_, error-code>
+type ResultErrorCode cm.Result[ErrorCode, struct{}, ErrorCode]
+
 // IPSocketAddressShape is used for storage in variant or result types.
 type IPSocketAddressShape struct {
 	_     cm.HostLayout
 	shape [unsafe.Sizeof(IPSocketAddress{})]byte
 }
+
+// ResultIPSocketAddressErrorCode represents the result "#".
+//
+//	result<ip-socket-address, error-code>
+type ResultIPSocketAddressErrorCode cm.Result[IPSocketAddressShape, IPSocketAddress, ErrorCode]
+
+// ResultU64ErrorCode represents the result "#".
+//
+//	result<u64, error-code>
+type ResultU64ErrorCode cm.Result[uint64, uint64, ErrorCode]
 
 func lower_IPv4Address(v network.IPv4Address) (f0 uint32, f1 uint32, f2 uint32, f3 uint32) {
 	f0 = (uint32)(v[0])
@@ -81,6 +96,11 @@ type TupleIncomingDatagramStreamOutgoingDatagramStreamShape struct {
 	shape [unsafe.Sizeof(cm.Tuple[IncomingDatagramStream, OutgoingDatagramStream]{})]byte
 }
 
+// ResultTupleIncomingDatagramStreamOutgoingDatagramStreamErrorCode represents the imported result "#".
+//
+//	result<tuple<incoming-datagram-stream, outgoing-datagram-stream>, error-code>
+type ResultTupleIncomingDatagramStreamOutgoingDatagramStreamErrorCode cm.Result[TupleIncomingDatagramStreamOutgoingDatagramStreamShape, cm.Tuple[IncomingDatagramStream, OutgoingDatagramStream], ErrorCode]
+
 func lower_OptionIPSocketAddress(v cm.Option[IPSocketAddress]) (f0 uint32, f1 uint32, f2 uint32, f3 uint32, f4 uint32, f5 uint32, f6 uint32, f7 uint32, f8 uint32, f9 uint32, f10 uint32, f11 uint32, f12 uint32) {
 	some := v.Some()
 	if some != nil {
@@ -101,3 +121,13 @@ func lower_OptionIPSocketAddress(v cm.Option[IPSocketAddress]) (f0 uint32, f1 ui
 	}
 	return
 }
+
+// ResultU8ErrorCode represents the result "#".
+//
+//	result<u8, error-code>
+type ResultU8ErrorCode cm.Result[uint8, uint8, ErrorCode]
+
+// ResultListIncomingDatagramErrorCode represents the result "#".
+//
+//	result<list<incoming-datagram>, error-code>
+type ResultListIncomingDatagramErrorCode cm.Result[cm.List[IncomingDatagram], cm.List[IncomingDatagram], ErrorCode]

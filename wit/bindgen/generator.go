@@ -377,6 +377,29 @@ func (g *generator) defineInterface(w *wit.World, dir wit.Direction, i *wit.Inte
 	return nil
 }
 
+func (g *generator) defineAnonymousType(file *gen.File, dir wit.Direction, t wit.Type) error {
+	if t.TypeName() != "" {
+		return nil
+	}
+
+	td, ok := t.(*wit.TypeDef)
+	if !ok {
+		return nil
+	}
+
+	abiFile := g.abiFile(file.Package)
+
+	switch td.Kind.(type) {
+	case *wit.Result:
+		g.declareTypeDef(abiFile, dir, td, g.typeDefGoName(dir, td))
+		return g.defineTypeDef(dir, td, "")
+	default:
+		// fmt.Printf("td.Kind.(type) = %T\n", td.Kind)
+	}
+
+	return nil
+}
+
 func (g *generator) defineTypeDef(dir wit.Direction, t *wit.TypeDef, name string) error {
 	if !g.define(dir, t) {
 		return nil
@@ -1649,6 +1672,14 @@ func (g *generator) declareFunction(owner wit.TypeOwner, dir wit.Direction, f *w
 
 	if fdecl, ok := g.functions[dir][f]; ok {
 		return fdecl, nil
+	}
+
+	// Define anonymous types
+	for _, p := range f.Params {
+		g.defineAnonymousType(file, tdir, p.Type)
+	}
+	for _, p := range f.Results {
+		g.defineAnonymousType(file, tdir, p.Type)
 	}
 
 	if dir == wit.Imported {

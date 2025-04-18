@@ -1,0 +1,66 @@
+{
+  "worlds": [
+    {
+      "name": "w",
+      "imports": {
+        "interface-0": {
+          "interface": {
+            "id": 0
+          }
+        }
+      },
+      "exports": {},
+      "package": 0
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "i",
+      "types": {},
+      "functions": {
+        "f1": {
+          "name": "f1",
+          "kind": "freestanding",
+          "params": [],
+          "result": 0
+        },
+        "f2": {
+          "name": "f2",
+          "kind": "freestanding",
+          "params": [],
+          "result": 0
+        },
+        "f3": {
+          "name": "f3",
+          "kind": "freestanding",
+          "params": [],
+          "result": 0
+        }
+      },
+      "package": 0
+    }
+  ],
+  "types": [
+    {
+      "name": null,
+      "kind": {
+        "result": {
+          "ok": "bool",
+          "err": "u8"
+        }
+      },
+      "owner": null
+    }
+  ],
+  "packages": [
+    {
+      "name": "test:test",
+      "interfaces": {
+        "i": 0
+      },
+      "worlds": {
+        "w": 0
+      }
+    }
+  ]
+}

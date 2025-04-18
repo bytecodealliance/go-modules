@@ -3,7 +3,7 @@
 package run
 
 import (
-	"go.bytecodealliance.org/cm"
+	"tests/generated/wasi/cli/v0.2.0/exit"
 )
 
 // Exports represents the caller-defined exports from "wasi:cli/run@0.2.0".
@@ -13,5 +13,5 @@ var Exports struct {
 	// Run the program.
 	//
 	//	run: func() -> result
-	Run func() (result cm.BoolResult)
+	Run func() (result exit.Result)
 }

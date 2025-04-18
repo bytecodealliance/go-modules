@@ -67,7 +67,7 @@ func (self ResolveAddressStream) ResourceDrop() {
 //	resolve-next-address: func() -> result<option<ip-address>, error-code>
 //
 //go:nosplit
-func (self ResolveAddressStream) ResolveNextAddress() (result cm.Result[OptionIPAddressShape, cm.Option[IPAddress], ErrorCode]) {
+func (self ResolveAddressStream) ResolveNextAddress() (result ResultOptionIPAddressErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_ResolveAddressStreamResolveNextAddress((uint32)(self0), &result)
 	return
@@ -117,7 +117,7 @@ func (self ResolveAddressStream) Subscribe() (result Pollable) {
 //	error-code>
 //
 //go:nosplit
-func ResolveAddresses(network_ Network, name string) (result cm.Result[ResolveAddressStream, ResolveAddressStream, ErrorCode]) {
+func ResolveAddresses(network_ Network, name string) (result ResultResolveAddressStreamErrorCode) {
 	network0 := cm.Reinterpret[uint32](network_)
 	name0, name1 := cm.LowerString(name)
 	wasmimport_ResolveAddresses((uint32)(network0), (*uint8)(name0), (uint32)(name1), &result)

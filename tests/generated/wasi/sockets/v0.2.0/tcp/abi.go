@@ -14,17 +14,62 @@ type TupleTCPSocketInputStreamOutputStreamShape struct {
 	shape [unsafe.Sizeof(cm.Tuple3[TCPSocket, InputStream, OutputStream]{})]byte
 }
 
+// ResultTupleTCPSocketInputStreamOutputStreamErrorCode represents the imported result "#".
+//
+//	result<tuple<tcp-socket, input-stream, output-stream>, error-code>
+type ResultTupleTCPSocketInputStreamOutputStreamErrorCode cm.Result[TupleTCPSocketInputStreamOutputStreamShape, cm.Tuple3[TCPSocket, InputStream, OutputStream], ErrorCode]
+
+// ResultErrorCode represents the result "#".
+//
+//	result<_, error-code>
+type ResultErrorCode cm.Result[ErrorCode, struct{}, ErrorCode]
+
 // TupleInputStreamOutputStreamShape is used for storage in variant or result types.
 type TupleInputStreamOutputStreamShape struct {
 	_     cm.HostLayout
 	shape [unsafe.Sizeof(cm.Tuple[InputStream, OutputStream]{})]byte
 }
 
+// ResultTupleInputStreamOutputStreamErrorCode represents the imported result "#".
+//
+//	result<tuple<input-stream, output-stream>, error-code>
+type ResultTupleInputStreamOutputStreamErrorCode cm.Result[TupleInputStreamOutputStreamShape, cm.Tuple[InputStream, OutputStream], ErrorCode]
+
+// ResultU8ErrorCode represents the result "#".
+//
+//	result<u8, error-code>
+type ResultU8ErrorCode cm.Result[uint8, uint8, ErrorCode]
+
+// ResultU32ErrorCode represents the result "#".
+//
+//	result<u32, error-code>
+type ResultU32ErrorCode cm.Result[uint32, uint32, ErrorCode]
+
+// ResultBoolErrorCode represents the result "#".
+//
+//	result<bool, error-code>
+type ResultBoolErrorCode cm.Result[ErrorCode, bool, ErrorCode]
+
+// ResultDurationErrorCode represents the result "#".
+//
+//	result<duration, error-code>
+type ResultDurationErrorCode cm.Result[uint64, Duration, ErrorCode]
+
 // IPSocketAddressShape is used for storage in variant or result types.
 type IPSocketAddressShape struct {
 	_     cm.HostLayout
 	shape [unsafe.Sizeof(IPSocketAddress{})]byte
 }
+
+// ResultIPSocketAddressErrorCode represents the result "#".
+//
+//	result<ip-socket-address, error-code>
+type ResultIPSocketAddressErrorCode cm.Result[IPSocketAddressShape, IPSocketAddress, ErrorCode]
+
+// ResultU64ErrorCode represents the result "#".
+//
+//	result<u64, error-code>
+type ResultU64ErrorCode cm.Result[uint64, uint64, ErrorCode]
 
 func lower_IPv4Address(v network.IPv4Address) (f0 uint32, f1 uint32, f2 uint32, f3 uint32) {
 	f0 = (uint32)(v[0])

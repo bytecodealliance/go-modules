@@ -122,7 +122,7 @@ func (self UDPSocket) AddressFamily() (result IPAddressFamily) {
 //	finish-bind: func() -> result<_, error-code>
 //
 //go:nosplit
-func (self UDPSocket) FinishBind() (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self UDPSocket) FinishBind() (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_UDPSocketFinishBind((uint32)(self0), &result)
 	return
@@ -151,7 +151,7 @@ func (self UDPSocket) FinishBind() (result cm.Result[ErrorCode, struct{}, ErrorC
 //	local-address: func() -> result<ip-socket-address, error-code>
 //
 //go:nosplit
-func (self UDPSocket) LocalAddress() (result cm.Result[IPSocketAddressShape, IPSocketAddress, ErrorCode]) {
+func (self UDPSocket) LocalAddress() (result ResultIPSocketAddressErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_UDPSocketLocalAddress((uint32)(self0), &result)
 	return
@@ -175,7 +175,7 @@ func (self UDPSocket) LocalAddress() (result cm.Result[IPSocketAddressShape, IPS
 //	receive-buffer-size: func() -> result<u64, error-code>
 //
 //go:nosplit
-func (self UDPSocket) ReceiveBufferSize() (result cm.Result[uint64, uint64, ErrorCode]) {
+func (self UDPSocket) ReceiveBufferSize() (result ResultU64ErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_UDPSocketReceiveBufferSize((uint32)(self0), &result)
 	return
@@ -197,7 +197,7 @@ func (self UDPSocket) ReceiveBufferSize() (result cm.Result[uint64, uint64, Erro
 //	remote-address: func() -> result<ip-socket-address, error-code>
 //
 //go:nosplit
-func (self UDPSocket) RemoteAddress() (result cm.Result[IPSocketAddressShape, IPSocketAddress, ErrorCode]) {
+func (self UDPSocket) RemoteAddress() (result ResultIPSocketAddressErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_UDPSocketRemoteAddress((uint32)(self0), &result)
 	return
@@ -208,7 +208,7 @@ func (self UDPSocket) RemoteAddress() (result cm.Result[IPSocketAddressShape, IP
 //	send-buffer-size: func() -> result<u64, error-code>
 //
 //go:nosplit
-func (self UDPSocket) SendBufferSize() (result cm.Result[uint64, uint64, ErrorCode]) {
+func (self UDPSocket) SendBufferSize() (result ResultU64ErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_UDPSocketSendBufferSize((uint32)(self0), &result)
 	return
@@ -219,7 +219,7 @@ func (self UDPSocket) SendBufferSize() (result cm.Result[uint64, uint64, ErrorCo
 //	set-receive-buffer-size: func(value: u64) -> result<_, error-code>
 //
 //go:nosplit
-func (self UDPSocket) SetReceiveBufferSize(value uint64) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self UDPSocket) SetReceiveBufferSize(value uint64) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	value0 := (uint64)(value)
 	wasmimport_UDPSocketSetReceiveBufferSize((uint32)(self0), (uint64)(value0), &result)
@@ -231,7 +231,7 @@ func (self UDPSocket) SetReceiveBufferSize(value uint64) (result cm.Result[Error
 //	set-send-buffer-size: func(value: u64) -> result<_, error-code>
 //
 //go:nosplit
-func (self UDPSocket) SetSendBufferSize(value uint64) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self UDPSocket) SetSendBufferSize(value uint64) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	value0 := (uint64)(value)
 	wasmimport_UDPSocketSetSendBufferSize((uint32)(self0), (uint64)(value0), &result)
@@ -243,7 +243,7 @@ func (self UDPSocket) SetSendBufferSize(value uint64) (result cm.Result[ErrorCod
 //	set-unicast-hop-limit: func(value: u8) -> result<_, error-code>
 //
 //go:nosplit
-func (self UDPSocket) SetUnicastHopLimit(value uint8) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self UDPSocket) SetUnicastHopLimit(value uint8) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	value0 := (uint32)(value)
 	wasmimport_UDPSocketSetUnicastHopLimit((uint32)(self0), (uint32)(value0), &result)
@@ -288,7 +288,7 @@ func (self UDPSocket) SetUnicastHopLimit(value uint8) (result cm.Result[ErrorCod
 //	result<_, error-code>
 //
 //go:nosplit
-func (self UDPSocket) StartBind(network_ Network, localAddress IPSocketAddress) (result cm.Result[ErrorCode, struct{}, ErrorCode]) {
+func (self UDPSocket) StartBind(network_ Network, localAddress IPSocketAddress) (result ResultErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	network0 := cm.Reinterpret[uint32](network_)
 	localAddress0, localAddress1, localAddress2, localAddress3, localAddress4, localAddress5, localAddress6, localAddress7, localAddress8, localAddress9, localAddress10, localAddress11 := lower_IPSocketAddress(localAddress)
@@ -353,7 +353,7 @@ func (self UDPSocket) StartBind(network_ Network, localAddress IPSocketAddress) 
 //	outgoing-datagram-stream>, error-code>
 //
 //go:nosplit
-func (self UDPSocket) Stream(remoteAddress cm.Option[IPSocketAddress]) (result cm.Result[TupleIncomingDatagramStreamOutgoingDatagramStreamShape, cm.Tuple[IncomingDatagramStream, OutgoingDatagramStream], ErrorCode]) {
+func (self UDPSocket) Stream(remoteAddress cm.Option[IPSocketAddress]) (result ResultTupleIncomingDatagramStreamOutgoingDatagramStreamErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	remoteAddress0, remoteAddress1, remoteAddress2, remoteAddress3, remoteAddress4, remoteAddress5, remoteAddress6, remoteAddress7, remoteAddress8, remoteAddress9, remoteAddress10, remoteAddress11, remoteAddress12 := lower_OptionIPSocketAddress(remoteAddress)
 	wasmimport_UDPSocketStream((uint32)(self0), (uint32)(remoteAddress0), (uint32)(remoteAddress1), (uint32)(remoteAddress2), (uint32)(remoteAddress3), (uint32)(remoteAddress4), (uint32)(remoteAddress5), (uint32)(remoteAddress6), (uint32)(remoteAddress7), (uint32)(remoteAddress8), (uint32)(remoteAddress9), (uint32)(remoteAddress10), (uint32)(remoteAddress11), (uint32)(remoteAddress12), &result)
@@ -389,7 +389,7 @@ func (self UDPSocket) Subscribe() (result Pollable) {
 //	unicast-hop-limit: func() -> result<u8, error-code>
 //
 //go:nosplit
-func (self UDPSocket) UnicastHopLimit() (result cm.Result[uint8, uint8, ErrorCode]) {
+func (self UDPSocket) UnicastHopLimit() (result ResultU8ErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_UDPSocketUnicastHopLimit((uint32)(self0), &result)
 	return
@@ -442,7 +442,7 @@ func (self IncomingDatagramStream) ResourceDrop() {
 //	receive: func(max-results: u64) -> result<list<incoming-datagram>, error-code>
 //
 //go:nosplit
-func (self IncomingDatagramStream) Receive(maxResults uint64) (result cm.Result[cm.List[IncomingDatagram], cm.List[IncomingDatagram], ErrorCode]) {
+func (self IncomingDatagramStream) Receive(maxResults uint64) (result ResultListIncomingDatagramErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	maxResults0 := (uint64)(maxResults)
 	wasmimport_IncomingDatagramStreamReceive((uint32)(self0), (uint64)(maxResults0), &result)
@@ -499,7 +499,7 @@ func (self OutgoingDatagramStream) ResourceDrop() {
 //	check-send: func() -> result<u64, error-code>
 //
 //go:nosplit
-func (self OutgoingDatagramStream) CheckSend() (result cm.Result[uint64, uint64, ErrorCode]) {
+func (self OutgoingDatagramStream) CheckSend() (result ResultU64ErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	wasmimport_OutgoingDatagramStreamCheckSend((uint32)(self0), &result)
 	return
@@ -559,7 +559,7 @@ func (self OutgoingDatagramStream) CheckSend() (result cm.Result[uint64, uint64,
 //	send: func(datagrams: list<outgoing-datagram>) -> result<u64, error-code>
 //
 //go:nosplit
-func (self OutgoingDatagramStream) Send(datagrams cm.List[OutgoingDatagram]) (result cm.Result[uint64, uint64, ErrorCode]) {
+func (self OutgoingDatagramStream) Send(datagrams cm.List[OutgoingDatagram]) (result ResultU64ErrorCode) {
 	self0 := cm.Reinterpret[uint32](self)
 	datagrams0, datagrams1 := cm.LowerList(datagrams)
 	wasmimport_OutgoingDatagramStreamSend((uint32)(self0), (*OutgoingDatagram)(datagrams0), (uint32)(datagrams1), &result)
