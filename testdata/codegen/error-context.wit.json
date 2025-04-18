@@ -36,14 +36,14 @@
             },
             {
               "name": "y",
-              "type": 1
+              "type": "error-context"
             },
             {
               "name": "z",
-              "type": 2
+              "type": 1
             }
           ],
-          "result": 4
+          "result": 3
         }
       },
       "package": 0
@@ -52,27 +52,24 @@
   "types": [
     {
       "name": "foo",
-      "kind": "error-context",
+      "kind": {
+        "type": "error-context"
+      },
       "owner": {
         "interface": 0
       }
     },
     {
       "name": null,
-      "kind": "error-context",
-      "owner": null
-    },
-    {
-      "name": null,
       "kind": {
-        "future": 1
+        "future": "error-context"
       },
       "owner": null
     },
     {
       "name": null,
       "kind": {
-        "stream": 1
+        "stream": "error-context"
       },
       "owner": null
     },
@@ -80,8 +77,8 @@
       "name": null,
       "kind": {
         "result": {
-          "ok": 3,
-          "err": 1
+          "ok": 2,
+          "err": "error-context"
         }
       },
       "owner": null
