@@ -96,17 +96,17 @@ func (t *TypeDef) Methods() []*Function {
 	return methods
 }
 
-// Size returns the byte size for values of type t.
+// Size returns the byte size for values of [TypeDef] t.
 func (t *TypeDef) Size() uintptr {
 	return t.Kind.Size()
 }
 
-// Align returns the byte alignment for values of type t.
+// Align returns the byte alignment for values of [TypeDef] t.
 func (t *TypeDef) Align() uintptr {
 	return t.Kind.Align()
 }
 
-// Flat returns the [flattened] ABI representation of t.
+// Flat returns the [flattened] ABI representation of [TypeDef] t.
 //
 // [flattened]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#flattening
 func (t *TypeDef) Flat() []Type {
