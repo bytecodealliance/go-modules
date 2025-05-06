@@ -228,7 +228,7 @@ func (g *generator) defineWorlds() error {
 	g.opts.logger.Infof("Generating Go for %d world(s)\n", len(g.res.Worlds))
 	for _, w := range g.res.Worlds {
 		// Define a Go package for every world, regardless of use
-		_, err := g.defineGoPackage(w, nil, "")
+		_, err := g.newPackage(w, nil, "")
 		if err != nil {
 			return err
 		}
@@ -251,7 +251,7 @@ func (g *generator) defineWorld(w *wit.World) error {
 
 	g.moduleNames[w] = id.String()
 
-	pkg, err := g.defineGoPackage(w, nil, "")
+	pkg, err := g.newPackage(w, nil, "")
 	if err != nil {
 		return err
 	}
@@ -321,7 +321,7 @@ func (g *generator) defineInterface(w *wit.World, dir wit.Direction, i *wit.Inte
 		g.moduleNames[i] = id.String()
 	}
 
-	pkg, err := g.defineGoPackage(w, i, name)
+	pkg, err := g.newPackage(w, i, name)
 	if err != nil {
 		return err
 	}
@@ -2296,7 +2296,7 @@ func (g *generator) packageFor(owner wit.TypeOwner) *gen.Package {
 	return pkg
 }
 
-func (g *generator) defineGoPackage(w *wit.World, i *wit.Interface, name string) (*gen.Package, error) {
+func (g *generator) newPackage(w *wit.World, i *wit.Interface, name string) (*gen.Package, error) {
 	var owner wit.TypeOwner
 	var id wit.Ident
 
