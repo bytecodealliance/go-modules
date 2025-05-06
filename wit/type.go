@@ -142,6 +142,35 @@ func (_primitive[T]) hasPointer() bool {
 	}
 }
 
+// Shape returns the memory shape of this type.
+func (_primitive[T]) Shape() []Type {
+	var v T
+	switch any(v).(type) {
+	case bool:
+		return []Type{Bool{}} // Bool is distict because of memory representation in LLVM.
+	case int8, uint8:
+		return []Type{U8{}}
+	case int16, uint16:
+		return []Type{U16{}}
+	case int32, uint32:
+		return []Type{U32{}}
+	case int64, uint64:
+		return []Type{U64{}}
+	case float32:
+		return []Type{U32{}}
+	case float64:
+		return []Type{U64{}}
+	case char:
+		return []Type{U32{}}
+	case string:
+		return []Type{PointerTo(U8{}), U32{}} // Pointers are distinct
+	case errorContext:
+		return []Type{U32{}}
+	default:
+		panic(fmt.Sprintf("BUG: unknown primitive type %T", v)) // should never reach here
+	}
+}
+
 // Flat returns the [flattened] ABI representation of this type.
 //
 // [flattened]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#flattening

@@ -106,6 +106,11 @@ func (t *TypeDef) Align() uintptr {
 	return t.Kind.Align()
 }
 
+// Shape returns the memory shape of [TypeDef] t.
+func (t *TypeDef) Shape() []Type {
+	return t.Kind.Shape()
+}
+
 // Flat returns the [flattened] ABI representation of [TypeDef] t.
 //
 // [flattened]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#flattening

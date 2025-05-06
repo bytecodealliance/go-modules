@@ -22,6 +22,10 @@ func (*Pointer) Size() uintptr { return 4 }
 // [ABI byte alignment]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#alignment
 func (*Pointer) Align() uintptr { return 4 }
 
+// Shape returns the memory shape of [Pointer].
+// This is represented as a byte pointer, regardless of the associated type.
+func (p *Pointer) Shape() []Type { return []Type{PointerTo(U8{})} }
+
 // Flat returns the [flattened] ABI representation of [Pointer].
 //
 // [flattened]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#flattening

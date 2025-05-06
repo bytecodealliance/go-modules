@@ -6,7 +6,7 @@ import (
 )
 
 // ABI is the interface implemented by any type that can report its
-// [Canonical ABI] [size], [alignment], and [flat] representation.
+// [Canonical ABI] [size], [alignment], memory shape, and [flat] representation.
 //
 // [Canonical ABI]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md
 // [size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
@@ -15,6 +15,7 @@ import (
 type ABI interface {
 	Size() uintptr
 	Align() uintptr
+	Shape() []Type
 	Flat() []Type
 }
 

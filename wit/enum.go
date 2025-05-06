@@ -44,11 +44,16 @@ func (e *Enum) Align() uintptr {
 	return e.Despecialize().Align()
 }
 
+// Shape returns the memory shape of [Enum] e.
+func (e *Enum) Shape() []Type {
+	return Discriminant(len(v.Cases)).Shape()
+}
+
 // Flat returns the [flattened] ABI representation of [Enum] e.
 //
 // [flattened]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#flattening
-func (v *Enum) Flat() []Type {
-	return Discriminant(len(v.Cases)).Flat()
+func (e *Enum) Flat() []Type {
+	return Discriminant(len(e.Cases)).Flat()
 }
 
 // EnumCase represents a single case in an [Enum].

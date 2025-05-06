@@ -61,6 +61,11 @@ func (v *Variant) Align() uintptr {
 	return max(Discriminant(len(v.Cases)).Align(), v.maxCaseAlign())
 }
 
+// Shape returns the memory shape of [Variant] v.
+func (v *Variant) Shape() []Type {
+	var shape []Type
+}
+
 // Flat returns the [flattened] ABI representation of [Variant] v.
 //
 // [flattened]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#flattening
