@@ -2240,20 +2240,20 @@ func (g *generator) abiFile(pkg *gen.Package) *gen.File {
 }
 
 func (g *generator) fileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.goPackageFor(owner)
+	pkg := g.packageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".wit.go")
 	file.GeneratedBy = g.opts.generatedBy
 	return file
 }
 
 func (g *generator) witFileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.goPackageFor(owner)
+	pkg := g.packageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".wit")
 	return file
 }
 
 func (g *generator) exportsFileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.goPackageFor(owner)
+	pkg := g.packageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".exports.go")
 	file.GeneratedBy = g.opts.generatedBy
 	if len(file.Header) == 0 {
@@ -2268,7 +2268,7 @@ func (g *generator) exportsFileFor(owner wit.TypeOwner) *gen.File {
 }
 
 func (g *generator) wasmFileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.goPackageFor(owner)
+	pkg := g.packageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".wasm.go")
 	file.GeneratedBy = g.opts.generatedBy
 	if len(file.Header) == 0 {
@@ -2278,7 +2278,7 @@ func (g *generator) wasmFileFor(owner wit.TypeOwner) *gen.File {
 }
 
 func (g *generator) cgoFileFor(owner wit.TypeOwner) *gen.File {
-	pkg := g.goPackageFor(owner)
+	pkg := g.packageFor(owner)
 	file := pkg.File(path.Base(pkg.Path) + ".cgo.go")
 	file.GeneratedBy = g.opts.generatedBy
 	if file.GoBuild == "" {
@@ -2287,7 +2287,7 @@ func (g *generator) cgoFileFor(owner wit.TypeOwner) *gen.File {
 	return file
 }
 
-func (g *generator) goPackageFor(owner wit.TypeOwner) *gen.Package {
+func (g *generator) packageFor(owner wit.TypeOwner) *gen.Package {
 	pkg := g.witPackages[owner]
 	if pkg == nil {
 		panic(fmt.Sprintf("BUG: nil package for wit.TypeOwner %s (%T: %p)",
