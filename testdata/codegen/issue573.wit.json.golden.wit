@@ -85,6 +85,12 @@ interface api {
 
 world types-example {
 	import types-interface;
+	import api-imports;
+	/// Comment for import inline
+	import inline: interface {
+		/// Comment for import inline function
+		inline-imp: func(args: list<option<char>>) -> result<_, char>;
+	}
 	use types-interface.{t2 as t2-renamed};
 	use types-interface.{t10};
 	use types-interface.{permissions};
@@ -98,13 +104,7 @@ world types-example {
 	/// NB: this record used to be empty, but that's no longer valid, so now it's
 	/// non-empty. Don't want to delete the whole test however.
 	record empty { not-empty-anymore: bool }
-	import api-imports;
 	import print: func(message: string, level: log-level);
-	/// Comment for import inline
-	import inline: interface {
-		/// Comment for import inline function
-		inline-imp: func(args: list<option<char>>) -> result<_, char>;
-	}
 	export f-f1: func(typedef: t10) -> t10;
 	export f1: func(f: f32, f-list: list<tuple<char, f64>>) -> tuple<s64, string>;
 	/// t2 has been renamed with `use self.types-interface.{t2 as t2-renamed}`

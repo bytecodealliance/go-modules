@@ -65,6 +65,10 @@ world w2 {}
 
 world in-a-world {
 	@since(version = 1.0.0)
+	import y: interface {}
+	@since(version = 1.0.0)
+	import z;
+	@since(version = 1.0.0)
 	record t1 { x: u32 }
 	@since(version = 1.0.0)
 	enum t2 { a }
@@ -83,10 +87,6 @@ world in-a-world {
 	}
 	@since(version = 1.0.0)
 	import x: func();
-	@since(version = 1.0.0)
-	import y: interface {}
-	@since(version = 1.0.0)
-	import z;
 	@since(version = 1.0.0)
 	export x: func();
 	@since(version = 1.0.0)

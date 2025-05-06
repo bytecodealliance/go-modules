@@ -22,12 +22,7 @@
       "imports": {
         "interface-0": {
           "interface": {
-            "id": 0,
-            "stability": {
-              "stable": {
-                "since": "0.2.0"
-              }
-            }
+            "id": 0
           }
         }
       },

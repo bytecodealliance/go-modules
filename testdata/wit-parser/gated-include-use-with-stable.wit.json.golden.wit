@@ -1,20 +1,22 @@
 package wasmtime:test;
 
 world test {
-	import wasi:dep2/stable@0.2.3;
 	@unstable(feature = active)
-	use wasi:dep2/stable@0.2.3.{stable-resource};
+	import wasi:dep2/stable@0.2.3;
 	@unstable(feature = active)
 	import wasi:dep-unversioned/unversioned;
 	@unstable(feature = active)
-	use wasi:dep-unversioned/unversioned.{unversioned-resource};
-	@unstable(feature = active)
 	import wasi:dep-unstable/unstable;
+	@unstable(feature = active)
+	use wasi:dep2/stable@0.2.3.{stable-resource};
+	@unstable(feature = active)
+	use wasi:dep-unversioned/unversioned.{unversioned-resource};
 	@unstable(feature = active)
 	use wasi:dep-unstable/unstable.{unstable-resource};
 }
 
 world test-ordered {
+	@unstable(feature = active)
 	import wasi:dep2/stable@0.2.3;
 	@unstable(feature = active)
 	import wasi:dep-unversioned/unversioned;
@@ -44,13 +46,13 @@ package wasi:unstable@0.2.3 {
 		@unstable(feature = active)
 		import wasi:dep2/stable@0.2.3;
 		@unstable(feature = active)
-		use wasi:dep2/stable@0.2.3.{stable-resource};
-		@unstable(feature = active)
 		import wasi:dep-unversioned/unversioned;
 		@unstable(feature = active)
-		use wasi:dep-unversioned/unversioned.{unversioned-resource};
-		@unstable(feature = active)
 		import wasi:dep-unstable/unstable;
+		@unstable(feature = active)
+		use wasi:dep2/stable@0.2.3.{stable-resource};
+		@unstable(feature = active)
+		use wasi:dep-unversioned/unversioned.{unversioned-resource};
 		@unstable(feature = active)
 		use wasi:dep-unstable/unstable.{unstable-resource};
 	}

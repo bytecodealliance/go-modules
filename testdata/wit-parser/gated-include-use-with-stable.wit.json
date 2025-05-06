@@ -61,12 +61,7 @@
       "imports": {
         "interface-2": {
           "interface": {
-            "id": 2,
-            "stability": {
-              "stable": {
-                "since": "0.2.0"
-              }
-            }
+            "id": 2
           }
         },
         "interface-1": {
@@ -106,9 +101,6 @@
             }
           }
         },
-        "stable-resource": {
-          "type": 3
-        },
         "interface-1": {
           "interface": {
             "id": 1,
@@ -119,9 +111,6 @@
             }
           }
         },
-        "unversioned-resource": {
-          "type": 4
-        },
         "interface-0": {
           "interface": {
             "id": 0,
@@ -131,6 +120,12 @@
               }
             }
           }
+        },
+        "stable-resource": {
+          "type": 3
+        },
+        "unversioned-resource": {
+          "type": 4
         },
         "unstable-resource": {
           "type": 5
@@ -151,14 +146,11 @@
           "interface": {
             "id": 2,
             "stability": {
-              "stable": {
-                "since": "0.2.0"
+              "unstable": {
+                "feature": "active"
               }
             }
           }
-        },
-        "stable-resource": {
-          "type": 3
         },
         "interface-1": {
           "interface": {
@@ -170,9 +162,6 @@
             }
           }
         },
-        "unversioned-resource": {
-          "type": 4
-        },
         "interface-0": {
           "interface": {
             "id": 0,
@@ -182,6 +171,12 @@
               }
             }
           }
+        },
+        "stable-resource": {
+          "type": 3
+        },
+        "unversioned-resource": {
+          "type": 4
         },
         "unstable-resource": {
           "type": 5
@@ -197,8 +192,8 @@
           "interface": {
             "id": 2,
             "stability": {
-              "stable": {
-                "since": "0.2.0"
+              "unstable": {
+                "feature": "active"
               }
             }
           }
