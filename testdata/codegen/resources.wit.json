@@ -3,6 +3,11 @@
     {
       "name": "resources",
       "imports": {
+        "imports": {
+          "interface": {
+            "id": 2
+          }
+        },
         "interface-0": {
           "interface": {
             "id": 0
@@ -16,11 +21,6 @@
         },
         "big": {
           "type": 4
-        },
-        "imports": {
-          "interface": {
-            "id": 2
-          }
         }
       },
       "exports": {

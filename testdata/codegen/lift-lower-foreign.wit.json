@@ -8,6 +8,11 @@
             "id": 0
           }
         },
+        "interface-1": {
+          "interface": {
+            "id": 1
+          }
+        },
         "u1": {
           "type": 20
         },
@@ -37,11 +42,6 @@
         },
         "u11": {
           "type": 29
-        },
-        "interface-1": {
-          "interface": {
-            "id": 1
-          }
         }
       },
       "exports": {

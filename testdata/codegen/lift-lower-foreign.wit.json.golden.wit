@@ -38,6 +38,7 @@ interface the-interface {
 
 world foo {
 	import a;
+	import the-interface;
 	use a.{t1 as u1};
 	use a.{t2 as u2};
 	use a.{t3 as u3};
@@ -48,7 +49,6 @@ world foo {
 	use a.{t8 as %u8};
 	use a.{t10 as u10};
 	use a.{t11 as u11};
-	import the-interface;
 	export foo-f1: func(a: u1) -> u1;
 	export foo-f2: func(a: u2) -> u2;
 	export foo-f3: func(a: u3) -> u3;

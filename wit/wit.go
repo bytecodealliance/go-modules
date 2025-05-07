@@ -175,9 +175,9 @@ func (s *Stable) WIT(ctx Node, _ string) string {
 	case *World:
 		w = ctx
 	}
-	if w != nil && w.Package.Name.Version != nil {
+	if w != nil {
 		pv := w.Package.Name.Version
-		if pv.LessThan(s.Since) {
+		if pv == nil || pv.LessThan(s.Since) {
 			return ""
 		}
 	}
@@ -331,6 +331,18 @@ func (*InterfaceRef) WITKind() string { return "interface ref" }
 // [WIT]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md
 func (ref *InterfaceRef) WIT(ctx Node, name string) string {
 	if ref.Stability == nil {
+		return ref.Interface.WIT(ctx, name)
+	}
+	var w *World
+	switch ctx := ctx.(type) {
+	case worldImport:
+		w = ctx.World
+	case worldExport:
+		w = ctx.World
+	case *World:
+		w = ctx
+	}
+	if ref.Stability.Versioned() && w != nil && w.Package != ref.Interface.Package {
 		return ref.Interface.WIT(ctx, name)
 	}
 	return newline(ref.Stability.WIT(ctx, "")) + ref.Interface.WIT(ctx, name)

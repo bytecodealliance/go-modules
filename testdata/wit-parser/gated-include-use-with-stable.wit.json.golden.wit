@@ -1,0 +1,96 @@
+package wasmtime:test;
+
+world test {
+	@unstable(feature = active)
+	import wasi:dep2/stable@0.2.3;
+	@unstable(feature = active)
+	import wasi:dep-unversioned/unversioned;
+	@unstable(feature = active)
+	import wasi:dep-unstable/unstable;
+	@unstable(feature = active)
+	use wasi:dep2/stable@0.2.3.{stable-resource};
+	@unstable(feature = active)
+	use wasi:dep-unversioned/unversioned.{unversioned-resource};
+	@unstable(feature = active)
+	use wasi:dep-unstable/unstable.{unstable-resource};
+}
+
+world test-ordered {
+	@unstable(feature = active)
+	import wasi:dep2/stable@0.2.3;
+	@unstable(feature = active)
+	import wasi:dep-unversioned/unversioned;
+	@unstable(feature = active)
+	import wasi:dep-unstable/unstable;
+	@unstable(feature = active)
+	use wasi:dep2/stable@0.2.3.{stable-resource};
+	@unstable(feature = active)
+	use wasi:dep-unversioned/unversioned.{unversioned-resource};
+	@unstable(feature = active)
+	use wasi:dep-unstable/unstable.{unstable-resource};
+}
+
+package wasi:foo@0.2.3 {
+	@since(version = 0.2.0)
+	world imports {
+		import wasi:dep2/stable@0.2.3;
+		import wasi:dep-unversioned/unversioned;
+		@unstable(feature = active)
+		import wasi:dep-unstable/unstable;
+	}
+}
+
+package wasi:unstable@0.2.3 {
+	@unstable(feature = active)
+	world imports {
+		@unstable(feature = active)
+		import wasi:dep2/stable@0.2.3;
+		@unstable(feature = active)
+		import wasi:dep-unversioned/unversioned;
+		@unstable(feature = active)
+		import wasi:dep-unstable/unstable;
+		@unstable(feature = active)
+		use wasi:dep2/stable@0.2.3.{stable-resource};
+		@unstable(feature = active)
+		use wasi:dep-unversioned/unversioned.{unversioned-resource};
+		@unstable(feature = active)
+		use wasi:dep-unstable/unstable.{unstable-resource};
+	}
+}
+
+package wasi:dep-unstable {
+	@unstable(feature = active)
+	interface unstable {
+		@unstable(feature = active)
+		resource unstable-resource;
+	}
+
+	@unstable(feature = active)
+	world imports {
+		@unstable(feature = active)
+		import unstable;
+	}
+}
+
+package wasi:dep-unversioned {
+	interface unversioned {
+		resource unversioned-resource;
+	}
+
+	world imports {
+		import unversioned;
+	}
+}
+
+package wasi:dep2@0.2.3 {
+	@since(version = 0.2.1)
+	interface stable {
+		resource stable-resource;
+	}
+
+	@since(version = 0.2.0)
+	world imports {
+		@since(version = 0.2.0)
+		import stable;
+	}
+}
