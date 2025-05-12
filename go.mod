@@ -10,7 +10,7 @@ require (
 	github.com/urfave/cli/v3 v3.3.3
 	go.bytecodealliance.org/cm v0.2.2
 	golang.org/x/mod v0.24.0
-	golang.org/x/tools v0.32.0
+	golang.org/x/tools v0.33.0
 )
 
 require (
@@ -19,6 +19,6 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/ulikunitz/xz v0.5.12 // indirect
-	golang.org/x/sync v0.13.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/sync v0.14.0 // indirect
+	golang.org/x/sys v0.33.0 // indirect
 )
