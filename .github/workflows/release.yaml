@@ -33,9 +33,15 @@ jobs:
           go-version-file: go.mod
 
       - name: Run Go tests
+        env:
+          # Test with the same environment as the build.
+          CGO_ENABLED: 0
         run: go test ${{ env.go-modules }}
 
       - name: Build binary
+        env:
+          # Disable cgo so the pre-built binary is statically linked for maximum compatibility.
+          CGO_ENABLED: 0
         run: |
           mkdir -p build
           GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o wit-bindgen-go ./cmd/wit-bindgen-go
