@@ -33,6 +33,9 @@ jobs:
           go-version-file: go.mod
 
       - name: Run Go tests
+        env:
+          # Test with the same environment as the build.
+          CGO_ENABLED: 0
         run: go test ${{ env.go-modules }}
 
       - name: Build binary
