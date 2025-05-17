@@ -33,7 +33,7 @@ type AnyResult[Shape, OK, Err any] interface {
 // result represents the internal representation of a Component Model result type.
 type result[Shape, OK, Err any] struct {
 	_     HostLayout
-	isErr bool
+	isErr uint8
 	_     [0]OK
 	_     [0]Err
 	data  Shape // [unsafe.Sizeof(*(*Shape)(unsafe.Pointer(nil)))]byte
@@ -44,7 +44,7 @@ type result[Shape, OK, Err any] struct {
 func OK[R AnyResult[Shape, OK, Err], Shape, OK, Err any](ok OK) R {
 	var r Result[Shape, OK, Err]
 	r.validate()
-	r.isErr = ResultOK
+	r.isErr = 0
 	*((*OK)(unsafe.Pointer(&r.data))) = ok
 	return R(r)
 }
@@ -54,7 +54,7 @@ func OK[R AnyResult[Shape, OK, Err], Shape, OK, Err any](ok OK) R {
 func Err[R AnyResult[Shape, OK, Err], Shape, OK, Err any](err Err) R {
 	var r Result[Shape, OK, Err]
 	r.validate()
-	r.isErr = ResultErr
+	r.isErr = 1
 	*((*Err)(unsafe.Pointer(&r.data))) = err
 	return R(r)
 }
@@ -62,34 +62,34 @@ func Err[R AnyResult[Shape, OK, Err], Shape, OK, Err any](err Err) R {
 // SetOK sets r to an OK result.
 func (r *result[Shape, OK, Err]) SetOK(ok OK) {
 	r.validate()
-	r.isErr = ResultOK
+	r.isErr = 0
 	*((*OK)(unsafe.Pointer(&r.data))) = ok
 }
 
 // SetErr sets r to an error result.
 func (r *result[Shape, OK, Err]) SetErr(err Err) {
 	r.validate()
-	r.isErr = ResultErr
+	r.isErr = 1
 	*((*Err)(unsafe.Pointer(&r.data))) = err
 }
 
 // IsOK returns true if r represents the OK case.
 func (r *result[Shape, OK, Err]) IsOK() bool {
 	r.validate()
-	return !r.isErr
+	return r.isErr == 0
 }
 
 // IsErr returns true if r represents the error case.
 func (r *result[Shape, OK, Err]) IsErr() bool {
 	r.validate()
-	return r.isErr
+	return r.isErr == 1
 }
 
 // OK returns a non-nil *OK pointer if r represents the OK case.
 // If r represents an error, then it returns nil.
 func (r *result[Shape, OK, Err]) OK() *OK {
 	r.validate()
-	if r.isErr {
+	if r.isErr == 1 {
 		return nil
 	}
 	return (*OK)(unsafe.Pointer(&r.data))
@@ -99,7 +99,7 @@ func (r *result[Shape, OK, Err]) OK() *OK {
 // If r represents the OK case, then it returns nil.
 func (r *result[Shape, OK, Err]) Err() *Err {
 	r.validate()
-	if !r.isErr {
+	if r.isErr == 0 {
 		return nil
 	}
 	return (*Err)(unsafe.Pointer(&r.data))
@@ -109,7 +109,7 @@ func (r *result[Shape, OK, Err]) Err() *Err {
 // or (zero value of OK, Err, true) if r represents the error case.
 // This does not have a pointer receiver, so it can be chained.
 func (r result[Shape, OK, Err]) Result() (ok OK, err Err, isErr bool) {
-	if r.isErr {
+	if r.isErr == 1 {
 		return ok, *(*Err)(unsafe.Pointer(&r.data)), true
 	}
 	return *(*OK)(unsafe.Pointer(&r.data)), err, false
