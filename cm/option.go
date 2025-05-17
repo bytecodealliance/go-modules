@@ -25,7 +25,7 @@ func Some[T any](v T) Option[T] {
 }
 
 // option represents the internal representation of a Component Model option type.
-// The first byte is a bool representing none or some,
+// The first byte is a byte representing the none or some case,
 // followed by storage for the associated type T.
 type option[T any] struct {
 	_      HostLayout
