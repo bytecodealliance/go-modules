@@ -4,15 +4,15 @@ import "unsafe"
 
 const (
 	// ResultOK represents the OK case of a result.
-	ResultOK = false
+	ResultOK = 0
 
 	// ResultErr represents the error case of a result.
-	ResultErr = true
+	ResultErr = 1
 )
 
 // BoolResult represents a result with no OK or error type.
 // False represents the OK case and true represents the error case.
-type BoolResult bool
+type BoolResult uint8
 
 // Result represents a result sized to hold the Shape type.
 // The size of the Shape type must be greater than or equal to the size of OK and Err types.

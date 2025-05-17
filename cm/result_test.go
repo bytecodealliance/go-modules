@@ -87,7 +87,7 @@ func TestResultLayout(t *testing.T) {
 		size   uintptr
 		offset uintptr
 	}{
-		{"result", BoolResult(false), 1, 0},
+		{"result", BoolResult(0), 1, 0},
 		{"ok", BoolResult(ResultOK), 1, 0},
 		{"err", BoolResult(ResultErr), 1, 0},
 
@@ -368,6 +368,18 @@ func TestIssue344TupleOfResult(t *testing.T) {
 	type T Result[[1]R, uint64, [1]R]
 
 	want := uint64(2)
+	v := T(OK[T](want))
+	got := *v.OK()
+
+	if got != want {
+		t.Errorf("*v.OK(): %v, expected %v", got, want)
+	}
+}
+
+func TestIssue344BoolResult(t *testing.T) {
+	type T Result[BoolResult, uint8, BoolResult]
+
+	want := uint8(2)
 	v := T(OK[T](want))
 	got := *v.OK()
 
