@@ -351,11 +351,11 @@ func TestIssue284NotTinyGo(t *testing.T) {
 	}
 }
 
-func TestIssue344TupleOfOption(t *testing.T) {
-	type T Result[[1]Option[uint64], uint64, [1]Option[uint64]]
+func TestIssue344Option(t *testing.T) {
+	type T Result[Option[uint64], uint64, Option[uint64]]
 
 	want := uint64(2)
-	v := T(OK[Result[[1]Option[uint64], uint64, [1]Option[uint64]]](want))
+	v := T(OK[Result[Option[uint64], uint64, Option[uint64]]](want))
 	got := *v.OK()
 
 	if got != want {
@@ -363,9 +363,9 @@ func TestIssue344TupleOfOption(t *testing.T) {
 	}
 }
 
-func TestIssue344TupleOfResult(t *testing.T) {
+func TestIssue344Result(t *testing.T) {
 	type R Result[uint64, uint64, bool]
-	type T Result[[1]R, uint64, [1]R]
+	type T Result[R, uint64, R]
 
 	want := uint64(2)
 	v := T(OK[T](want))
