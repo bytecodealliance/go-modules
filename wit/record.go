@@ -18,7 +18,7 @@ func (r *Record) Size() uintptr {
 		s = Align(s, f.Type.Align())
 		s += f.Type.Size()
 	}
-	return s
+	return Align(s, r.Align())
 }
 
 // Align returns the [ABI byte alignment] for [Record] r.
