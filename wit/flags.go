@@ -11,7 +11,7 @@ type Flags struct {
 
 // Size returns the [ABI byte size] of [Flags] f.
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 func (f *Flags) Size() uintptr {
 	n := len(f.Flags)
 	switch {

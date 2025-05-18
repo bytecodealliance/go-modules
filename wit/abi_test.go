@@ -99,7 +99,7 @@ func TestDiscriminant(t *testing.T) {
 	}
 }
 
-func TestTypeSize(t *testing.T) {
+func TestTypeSizeAndAlign(t *testing.T) {
 	tests := []struct {
 		name  string
 		v     Type
@@ -119,6 +119,10 @@ func TestTypeSize(t *testing.T) {
 		{"f64", F64{}, 8, 8},
 		{"char", Char{}, 4, 4},
 		{"string", String{}, 8, 4},
+		{"option<string>", &TypeDef{Kind: &Option{Type: String{}}}, 12, 4},
+		{"option<f32>", &TypeDef{Kind: &Option{Type: F32{}}}, 8, 4},
+		{"variant", &TypeDef{Kind: &Variant{Cases: []Case{{Type: String{}}, {Type: F64{}}}}}, 16, 8},
+		{"record", &TypeDef{Kind: &Record{Fields: []Field{{Type: U16{}}, {Type: &TypeDef{Kind: &Result{OK: U64{}}}}, {Type: U8{}}}}}, 32, 8},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -156,6 +160,7 @@ func TestTypeFlat(t *testing.T) {
 		{"option<string>", &TypeDef{Kind: &Option{Type: String{}}}, []Type{U32{}, PointerTo(U8{}), U32{}}},
 		{"option<f32>", &TypeDef{Kind: &Option{Type: F32{}}}, []Type{U32{}, F32{}}},
 		{"variant", &TypeDef{Kind: &Variant{Cases: []Case{{Type: String{}}, {Type: F64{}}}}}, []Type{U32{}, U64{}, U32{}}},
+		{"record", &TypeDef{Kind: &Record{Fields: []Field{{Type: U16{}}, {Type: &TypeDef{Kind: &Result{OK: U64{}}}}, {Type: U8{}}}}}, []Type{U32{}, U32{}, U64{}, U32{}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -177,9 +182,6 @@ func witFor[T Node](nodes ...T) []string {
 
 // TestHasBorrow verifies that HasBorrow returns true for WIT types that contain a Borrow type.
 func TestHasBorrow(t *testing.T) {
-	makeBorrow := func() *TypeDef { return &TypeDef{Kind: &Borrow{}} }
-	makeTypeDef := func(kind TypeDefKind) *TypeDef { return &TypeDef{Kind: kind} }
-
 	testCases := []struct {
 		name     string
 		typeDef  *TypeDef
@@ -210,4 +212,12 @@ func TestHasBorrow(t *testing.T) {
 			}
 		})
 	}
+}
+
+func makeTypeDef(kind TypeDefKind) *TypeDef {
+	return &TypeDef{Kind: kind}
+}
+
+func makeBorrow() *TypeDef {
+	return &TypeDef{Kind: &Borrow{}}
 }

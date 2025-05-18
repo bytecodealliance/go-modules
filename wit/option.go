@@ -27,7 +27,7 @@ func (o *Option) Despecialize() TypeDefKind {
 // Size returns the [ABI byte size] for [Option] o.
 // It is first [despecialized] into a [Variant] with two cases, "none" and "some(T)", then sized.
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 // [despecialized]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#despecialization
 func (o *Option) Size() uintptr {
 	return o.Despecialize().Size()

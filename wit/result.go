@@ -40,7 +40,7 @@ func (r *Result) Types() []Type {
 // Size returns the [ABI byte size] for [Result] r.
 // It is first [despecialized] into a [Variant] with two cases "ok" and "error", then sized.
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 // [despecialized]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#despecialization
 func (r *Result) Size() uintptr {
 	return r.Despecialize().Size()

@@ -46,7 +46,7 @@ func (v *Variant) Types() []Type {
 
 // Size returns the [ABI byte size] for [Variant] v.
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 func (v *Variant) Size() uintptr {
 	s := Discriminant(len(v.Cases)).Size()
 	s = Align(s, v.maxCaseAlign())

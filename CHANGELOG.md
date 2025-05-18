@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Fixed
 
 - [#306](https://github.com/bytecodealliance/go-modules/issues/306): do not emit incompatible version feature gates when serializing WIT. For example, if a world with version `0.1.0` *includes* a world from another package with a `@since(version = 0.2.0)` feature gate, then strip that feature gate when serializing to WIT if the version is greater than the world’s package version.
+- [#350](https://github.com/bytecodealliance/go-modules/issues/350): correctly align `record` size to the highest alignment of its fields, per [specification](https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size).
 
 
 ## [v0.6.2] — 2025-03-16

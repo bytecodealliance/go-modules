@@ -387,3 +387,37 @@ func TestIssue344BoolResult(t *testing.T) {
 		t.Errorf("*v.OK(): %v, expected %v", got, want)
 	}
 }
+
+func TestIssue350(t *testing.T) {
+	type Shape struct {
+		_     HostLayout
+		shape [unsafe.Sizeof(Tuple3[uint16, Result[uint64, uint64, struct{}], uint8]{})]byte
+		// Previously, with bug in (*Record).Size() algorithm:
+		// shape [unsafe.Sizeof(Option[[3]string]{})]byte
+	}
+	type O Option[[3]string]
+	type E Tuple3[uint16, Result[uint64, uint64, struct{}], uint8]
+	type T Result[Shape, O, E]
+
+	shapeSize := unsafe.Sizeof(Shape{})
+	errSize := unsafe.Sizeof(E{})
+
+	if errSize > shapeSize {
+		t.Errorf("size of err type (%d) > size of shape type (%d)", errSize, shapeSize)
+
+		var e E
+		base := uintptr(unsafe.Pointer(&e))
+		f0 := uintptr(unsafe.Pointer(&e.F0)) - base
+		f1 := uintptr(unsafe.Pointer(&e.F1)) - base
+		f2 := uintptr(unsafe.Pointer(&e.F2)) - base
+		t.Logf("Offsets: F0: %d F1: %d F2 %d", f0, f1, f2)
+	}
+
+	// _ = Err[T](
+	// 	Err, uint8]{
+	// 		F0: 0,
+	// 		F1: OK[Result[uint64, uint64, struct{}]](0),
+	// 		F2: 0,
+	// 	},
+	// )
+}
