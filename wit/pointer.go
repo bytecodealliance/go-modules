@@ -14,7 +14,7 @@ type Pointer struct {
 
 // Size returns the [ABI byte size] for [Pointer].
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 func (*Pointer) Size() uintptr { return 4 }
 
 // Align returns the [ABI byte alignment] for [Pointer].

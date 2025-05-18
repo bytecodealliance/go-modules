@@ -11,7 +11,7 @@ type List struct {
 
 // Size returns the [ABI byte size] for a [List].
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 func (*List) Size() uintptr { return 8 } // [2]int32
 
 // Align returns the [ABI byte alignment] a [List].

@@ -8,7 +8,7 @@ type Resource struct{ _typeDefKind }
 
 // Size returns the [ABI byte size] for [Resource].
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 func (*Resource) Size() uintptr { return 4 }
 
 // Align returns the [ABI byte alignment] for [Resource].
@@ -45,7 +45,7 @@ func (_handle) isHandle() {}
 
 // Size returns the [ABI byte size] for this [Handle].
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 func (_handle) Size() uintptr { return 4 }
 
 // Align returns the [ABI byte alignment] for this [Handle].

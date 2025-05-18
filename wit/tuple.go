@@ -48,7 +48,7 @@ func (t *Tuple) Despecialize() TypeDefKind {
 // Size returns the [ABI byte size] for [Tuple] t.
 // It is first [despecialized] into a [Record] with 0-based integer field names, then sized.
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 // [despecialized]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#despecialization
 func (t *Tuple) Size() uintptr {
 	return t.Despecialize().Size()

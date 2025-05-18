@@ -29,7 +29,7 @@ func (e *Enum) Despecialize() TypeDefKind {
 // type that can represent 0...len(e.Cases).
 // It is first [despecialized] into a [Variant] with no associated types, then sized.
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 // [despecialized]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#despecialization
 func (e *Enum) Size() uintptr {
 	return e.Despecialize().Size()

@@ -11,7 +11,7 @@ type Record struct {
 
 // Size returns the [ABI byte size] for [Record] r.
 //
-// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#size
+// [ABI byte size]: https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size
 func (r *Record) Size() uintptr {
 	var s uintptr
 	for _, f := range r.Fields {
