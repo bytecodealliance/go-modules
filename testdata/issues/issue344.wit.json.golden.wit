@@ -1,0 +1,14 @@
+package issues:issue344;
+
+interface i {
+	type a = result<u64, tuple<option<u64>>>;
+	type b = result<u64, tuple<result<u64, bool>>>;
+	type c = result<result, u8>;
+	fa: func() -> a;
+	fb: func() -> b;
+	fc: func() -> c;
+}
+
+world w {
+	import i;
+}

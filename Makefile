@@ -22,7 +22,6 @@ generated: clean json
 clean:
 	rm -rf ./generated/*
 	rm -f internal/wasmtools/wasm-tools.wasm
-	rm -f internal/wasmtools/wasm-tools.wasm.gz
 
 # tests/generated writes generated Go code to the tests directory
 .PHONY: tests/generated

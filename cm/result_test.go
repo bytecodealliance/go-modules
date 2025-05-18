@@ -87,7 +87,7 @@ func TestResultLayout(t *testing.T) {
 		size   uintptr
 		offset uintptr
 	}{
-		{"result", BoolResult(false), 1, 0},
+		{"result", BoolResult(0), 1, 0},
 		{"ok", BoolResult(ResultOK), 1, 0},
 		{"err", BoolResult(ResultErr), 1, 0},
 
@@ -348,5 +348,42 @@ func TestIssue284NotTinyGo(t *testing.T) {
 				}
 			})
 		}
+	}
+}
+
+func TestIssue344Option(t *testing.T) {
+	type T Result[Option[uint64], uint64, Option[uint64]]
+
+	want := uint64(2)
+	v := T(OK[Result[Option[uint64], uint64, Option[uint64]]](want))
+	got := *v.OK()
+
+	if got != want {
+		t.Errorf("*v.OK(): %v, expected %v", got, want)
+	}
+}
+
+func TestIssue344Result(t *testing.T) {
+	type R Result[uint64, uint64, bool]
+	type T Result[R, uint64, R]
+
+	want := uint64(2)
+	v := T(OK[T](want))
+	got := *v.OK()
+
+	if got != want {
+		t.Errorf("*v.OK(): %v, expected %v", got, want)
+	}
+}
+
+func TestIssue344BoolResult(t *testing.T) {
+	type T Result[BoolResult, uint8, BoolResult]
+
+	want := uint8(2)
+	v := T(OK[T](want))
+	got := *v.OK()
+
+	if got != want {
+		t.Errorf("*v.OK(): %v, expected %v", got, want)
 	}
 }

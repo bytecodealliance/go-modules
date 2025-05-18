@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Mutating methods `SetOK` and `SetErr` on `result` types (`Result[Shape, OK, Err]`).
 
+### Changed
+
+- Breaking: `BoolResult` is now represented as a `uint8` rather than a `bool`. This fixes an issue with TinyGo where `bool` values are treated distinctly from `uint8`. See [#344](https://github.com/bytecodealliance/go-modules/issues/344) for more information.
+
+### Fixed
+
+- [#344](https://github.com/bytecodealliance/go-modules/issues/344): the memory representation of `option` and `result` now use `uint8` instead of `bool` for the discriminator. LLVM optimizes `bool` values into a single bit, which breaks WIT variants where the associated types share memory.
+
 ## [v0.2.2] — 2025-03-16
 
 ### Fixed

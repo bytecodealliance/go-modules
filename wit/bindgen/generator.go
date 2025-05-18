@@ -1036,6 +1036,11 @@ func (g *generator) typeDefShape(file *gen.File, dir wit.Direction, t *wit.TypeD
 			// Variants that can be represented as an enum do not need a custom shape.
 			return g.typeRep(file, dir, t)
 		}
+	case *wit.Result:
+		if len(kind.Types()) == 0 {
+			// Results without associated types do not need a custom shape.
+			return g.typeRep(file, dir, t)
+		}
 	case *wit.Tuple:
 		if kind.Type() != nil {
 			// Monotypic tuples have a packed memory layout.
@@ -1214,7 +1219,7 @@ func (g *generator) lowerVariant(file *gen.File, dir wit.Direction, t *wit.TypeD
 func (g *generator) lowerResult(file *gen.File, dir wit.Direction, t *wit.TypeDef, input string) string {
 	r := t.Kind.(*wit.Result)
 	if r.OK == nil && r.Err == nil {
-		return g.cast(file, dir, wit.Bool{}, wit.U32{}, input)
+		return g.cast(file, dir, wit.U8{}, wit.U32{}, input)
 	}
 	flat := t.Flat()
 	abiFile := g.abiFile(file.Package)
@@ -1425,7 +1430,7 @@ func (g *generator) liftResult(file *gen.File, dir wit.Direction, t *wit.TypeDef
 	r := t.Kind.(*wit.Result)
 	flat := t.Flat()
 	if r.OK == nil && r.Err == nil {
-		return g.cast(file, dir, wit.Bool{}, t, g.cast(file, dir, flat[0], wit.Bool{}, input))
+		return g.cast(file, dir, wit.Bool{}, t, g.cast(file, dir, flat[0], wit.U8{}, input))
 	}
 	abiFile := g.abiFile(file.Package)
 	var b strings.Builder

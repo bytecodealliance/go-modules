@@ -1,0 +1,145 @@
+{
+  "worlds": [
+    {
+      "name": "w",
+      "imports": {
+        "interface-0": {
+          "interface": {
+            "id": 0
+          }
+        }
+      },
+      "exports": {},
+      "package": 0
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "i",
+      "types": {
+        "a": 2,
+        "b": 5,
+        "c": 7
+      },
+      "functions": {
+        "fa": {
+          "name": "fa",
+          "kind": "freestanding",
+          "params": [],
+          "result": 2
+        },
+        "fb": {
+          "name": "fb",
+          "kind": "freestanding",
+          "params": [],
+          "result": 5
+        },
+        "fc": {
+          "name": "fc",
+          "kind": "freestanding",
+          "params": [],
+          "result": 7
+        }
+      },
+      "package": 0
+    }
+  ],
+  "types": [
+    {
+      "name": null,
+      "kind": {
+        "option": "u64"
+      },
+      "owner": null
+    },
+    {
+      "name": null,
+      "kind": {
+        "tuple": {
+          "types": [
+            0
+          ]
+        }
+      },
+      "owner": null
+    },
+    {
+      "name": "a",
+      "kind": {
+        "result": {
+          "ok": "u64",
+          "err": 1
+        }
+      },
+      "owner": {
+        "interface": 0
+      }
+    },
+    {
+      "name": null,
+      "kind": {
+        "result": {
+          "ok": "u64",
+          "err": "bool"
+        }
+      },
+      "owner": null
+    },
+    {
+      "name": null,
+      "kind": {
+        "tuple": {
+          "types": [
+            3
+          ]
+        }
+      },
+      "owner": null
+    },
+    {
+      "name": "b",
+      "kind": {
+        "result": {
+          "ok": "u64",
+          "err": 4
+        }
+      },
+      "owner": {
+        "interface": 0
+      }
+    },
+    {
+      "name": null,
+      "kind": {
+        "result": {
+          "ok": null,
+          "err": null
+        }
+      },
+      "owner": null
+    },
+    {
+      "name": "c",
+      "kind": {
+        "result": {
+          "ok": 6,
+          "err": "u8"
+        }
+      },
+      "owner": {
+        "interface": 0
+      }
+    }
+  ],
+  "packages": [
+    {
+      "name": "issues:issue344",
+      "interfaces": {
+        "i": 0
+      },
+      "worlds": {
+        "w": 0
+      }
+    }
+  ]
+}
