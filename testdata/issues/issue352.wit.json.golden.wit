@@ -1,0 +1,9 @@
+package issues:issue352;
+
+interface i {
+	type a = result<tuple<bool, bool, bool>, s16>;
+}
+
+world w {
+	import i;
+}
