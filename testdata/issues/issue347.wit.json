@@ -1,0 +1,78 @@
+{
+  "worlds": [
+    {
+      "name": "the-world",
+      "imports": {},
+      "exports": {
+        "interface-0": {
+          "interface": {
+            "id": 0
+          }
+        }
+      },
+      "package": 0
+    },
+    {
+      "name": "foo-command",
+      "imports": {
+        "interface-0": {
+          "interface": {
+            "id": 0
+          }
+        }
+      },
+      "exports": {},
+      "package": 1
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "custom",
+      "types": {},
+      "functions": {
+        "words": {
+          "name": "words",
+          "kind": "freestanding",
+          "params": [
+            {
+              "name": "text",
+              "type": "string"
+            }
+          ],
+          "result": 0
+        }
+      },
+      "package": 0
+    }
+  ],
+  "types": [
+    {
+      "name": null,
+      "kind": {
+        "list": "string"
+      },
+      "owner": null
+    }
+  ],
+  "packages": [
+    {
+      "name": "issues:inner",
+      "interfaces": {
+        "custom": 0
+      },
+      "worlds": {
+        "the-world": 0
+      }
+    },
+    {
+      "name": "issues:issue347",
+      "docs": {
+        "contents": "This comment must exist to trigger failure."
+      },
+      "interfaces": {},
+      "worlds": {
+        "foo-command": 1
+      }
+    }
+  ]
+}

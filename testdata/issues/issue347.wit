@@ -1,0 +1,16 @@
+/// This comment must exist to trigger failure.
+package issues:issue347;
+
+world foo-command {
+  import issues:inner/custom;
+}
+
+package issues:inner {
+	interface custom {
+		words: func(text: string) -> list<string>;
+	}
+
+	world the-world {
+		export custom;
+	}
+}
