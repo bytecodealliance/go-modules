@@ -163,12 +163,39 @@ func newGenerator(res *wit.Resolve, opts ...Option) (*generator, error) {
 		g.opts.cmPackage = cmPackage
 	}
 	g.res = res
-	for _, g.world = range res.Worlds {
-		if g.world.Match(g.opts.world) {
-			break
-		}
-		// otherwise choose the last world
+
+	// Sort WIT packages topologically
+	packages := slices.Clone(res.Packages)
+	slices.SortFunc(packages, wit.ComparePackages)
+	slices.Reverse(packages)
+
+	// Select WIT world
+	var first *wit.World
+	for _, pkg := range packages {
+		pkg.Worlds.All()(func(_ string, w *wit.World) bool {
+			if first == nil {
+				first = w
+			}
+			if w.Match(g.opts.world) {
+				name := w.Package.Name
+				name.Extension = w.Name
+				if g.world == nil {
+					g.opts.logger.Infof("WIT world: %s", name.String())
+					g.world = w
+				} else {
+					g.opts.logger.Warnf("Warning: ambiguous WIT world: %s", name.String())
+				}
+			}
+			return true
+		})
 	}
+
+	// Fall back to first world
+	if g.world == nil {
+		g.world = first
+	}
+
+	// Instantiate a wasm-tools instance.
 	g.wasmTools, err = wasmtools.New(context.Background())
 	if err != nil {
 		return nil, err

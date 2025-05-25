@@ -133,7 +133,7 @@ func (*Resolve) WITKind() string { return "resolve" }
 func (r *Resolve) WIT(ctx Node, _ string) string {
 	// Sort packages topologically by dependency
 	packages := slices.Clone(r.Packages)
-	slices.SortFunc(packages, comparePackages)
+	slices.SortFunc(packages, ComparePackages)
 	slices.Reverse(packages)
 
 	var b strings.Builder
