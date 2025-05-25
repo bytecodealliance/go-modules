@@ -2,7 +2,7 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v0.7.0] — 2025-05-25
 
 ### Changed
 
@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - [#350](https://github.com/bytecodealliance/go-modules/issues/350): correctly align `record` size to the highest alignment of its fields, per [specification](https://github.com/WebAssembly/component-model/blob/main/design/mvp/CanonicalABI.md#element-size).
 - [#352](https://github.com/bytecodealliance/go-modules/issues/352): do not use `tuple` types as data shape for `variant` or `result` types, as they may contain a `bool` or not be packed.
 - [#356](https://github.com/bytecodealliance/go-modules/issues/356): sort WIT packages topologically by dependency before matching WIT world when generating Go bindings. Warn if there is an ambiguous match.
+- Updated package `cm` to [v0.3.0](https://github.com/bytecodealliance/go-modules/releases/tag/cm%2Fv0.3.0) with multiple fixes, including a breaking change to `cm.BoolResult`.
 
 ## [v0.6.2] — 2025-03-16
 
@@ -257,7 +258,8 @@ Initial version, supporting [TinyGo](https://tinygo.org/) + [WASI](https://wasi.
 - Because Go does not have a native tagged union type, pointers represented in `variant` and `result` types may not be visible to the garbage collector and may be freed while still in use.
 - Support for mainline [Go](https://go.dev/).
 
-[Unreleased]: <https://github.com/bytecodealliance/go-modules/compare/v0.6.2..HEAD>
+[Unreleased]: <https://github.com/bytecodealliance/go-modules/compare/v0.7.0..HEAD>
+[v0.7.0]: <https://github.com/bytecodealliance/go-modules/compare/v0.6.2..v0.7.0>
 [v0.6.2]: <https://github.com/bytecodealliance/go-modules/compare/v0.6.1..v0.6.2>
 [v0.6.1]: <https://github.com/bytecodealliance/go-modules/compare/v0.6.0..v0.6.1>
 [v0.6.0]: <https://github.com/bytecodealliance/go-modules/compare/v0.5.0..v0.6.0>
