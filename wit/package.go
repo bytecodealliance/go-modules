@@ -48,7 +48,13 @@ func (p *Package) dependsOn(dep Node) bool {
 	return done
 }
 
-func comparePackages(a, b *Package) int {
+// ComparePackages compares two WIT packages, based on dependence.
+// When used with [slices.SortFunc], this function will sort packages
+// based on their mutual dependence. Packages with fewer or no dependencies will sort last.
+// If package a depends on package b, this function returns 1.
+// If package b depends on package a, this function returns -1.
+// If package a == package b, this function returns 0.
+func ComparePackages(a, b *Package) int {
 	// fmt.Fprintln(os.Stderr, "comparing "+b.Name.String()+" to "+a.Name.String())
 	switch {
 	case a == b:
