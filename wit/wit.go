@@ -1206,9 +1206,9 @@ func (p *Package) WIT(ctx Node, name string) string {
 		b.WriteString("}\n")
 	}
 	// Return empty string if package has no contents
-	// if i == 0 {
-	// 	return ""
-	// }
+	if filter != nil && i == 0 {
+		return ""
+	}
 	return b.String()
 }
 
