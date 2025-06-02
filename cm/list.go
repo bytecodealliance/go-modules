@@ -55,6 +55,10 @@ func (l list[T]) Data() *T {
 	return l.data
 }
 
+func (l list[T]) pointer() unsafe.Pointer {
+	return unsafe.Pointer(l.data)
+}
+
 // Len returns the length of the list.
 // TODO: should this return an int instead of a uintptr?
 func (l list[T]) Len() uintptr {
