@@ -4,6 +4,7 @@ package streams
 
 import (
 	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // This file contains wasmimport and wasmexport declarations for "wasi:io@0.2.0".
@@ -14,7 +15,7 @@ func wasmimport_InputStreamResourceDrop(self0 uint32)
 
 //go:wasmimport wasi:io/streams@0.2.0 [method]input-stream.blocking-read
 //go:noescape
-func wasmimport_InputStreamBlockingRead(self0 uint32, len0 uint64, result *cm.Result[cm.List[uint8], cm.List[uint8], StreamError])
+func wasmimport_InputStreamBlockingRead(self0 uint32, len0 uint64, result unsafe.Pointer)
 
 //go:wasmimport wasi:io/streams@0.2.0 [method]input-stream.blocking-skip
 //go:noescape
@@ -22,7 +23,7 @@ func wasmimport_InputStreamBlockingSkip(self0 uint32, len0 uint64, result *cm.Re
 
 //go:wasmimport wasi:io/streams@0.2.0 [method]input-stream.read
 //go:noescape
-func wasmimport_InputStreamRead(self0 uint32, len0 uint64, result *cm.Result[cm.List[uint8], cm.List[uint8], StreamError])
+func wasmimport_InputStreamRead(self0 uint32, len0 uint64, result unsafe.Pointer)
 
 //go:wasmimport wasi:io/streams@0.2.0 [method]input-stream.skip
 //go:noescape
