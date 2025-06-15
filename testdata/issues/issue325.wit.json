@@ -63,7 +63,7 @@
           }
         },
         "r": {
-          "type": 1
+          "type": 2
         }
       },
       "exports": {},
@@ -95,6 +95,20 @@
       },
       "owner": {
         "world": 2
+      },
+      "stability": {
+        "unstable": {
+          "feature": "active"
+        }
+      }
+    },
+    {
+      "name": "r",
+      "kind": {
+        "type": 0
+      },
+      "owner": {
+        "world": 3
       },
       "stability": {
         "unstable": {
