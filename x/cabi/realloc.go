@@ -6,6 +6,7 @@ import "unsafe"
 // the host-guest boundary.
 //
 // Note: the use of uintptr assumes 32-bit pointers when compiled for wasm or wasm32.
+//go:wasmexport cabi_realloc
 func realloc(ptr unsafe.Pointer, size, align, newsize uintptr) unsafe.Pointer {
 	if newsize <= size {
 		return unsafe.Add(ptr, offset(uintptr(ptr), align))
