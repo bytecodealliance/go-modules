@@ -32,6 +32,7 @@ import (
 	"go.bytecodealliance.org/cm"
 	wallclock "tests/generated/wasi/clocks/v0.2.0/wall-clock"
 	"tests/generated/wasi/io/v0.2.0/streams"
+	"unsafe"
 )
 
 // InputStream represents the imported type alias "wasi:filesystem/types@0.2.0#input-stream".
@@ -931,7 +932,7 @@ func (self Descriptor) Read(length FileSize, offset FileSize) (result cm.Result[
 	self0 := cm.Reinterpret[uint32](self)
 	length0 := (uint64)(length)
 	offset0 := (uint64)(offset)
-	wasmimport_DescriptorRead((uint32)(self0), (uint64)(length0), (uint64)(offset0), &result)
+	wasmimport_DescriptorRead((uint32)(self0), (uint64)(length0), (uint64)(offset0), unsafe.Pointer(&result))
 	return
 }
 
@@ -992,7 +993,7 @@ func (self Descriptor) ReadViaStream(offset FileSize) (result cm.Result[InputStr
 func (self Descriptor) ReadLinkAt(path string) (result cm.Result[string, string, ErrorCode]) {
 	self0 := cm.Reinterpret[uint32](self)
 	path0, path1 := cm.LowerString(path)
-	wasmimport_DescriptorReadLinkAt((uint32)(self0), (*uint8)(path0), (uint32)(path1), &result)
+	wasmimport_DescriptorReadLinkAt((uint32)(self0), (*uint8)(path0), (uint32)(path1), unsafe.Pointer(&result))
 	return
 }
 
@@ -1278,7 +1279,7 @@ func (self DirectoryEntryStream) ResourceDrop() {
 //go:nosplit
 func (self DirectoryEntryStream) ReadDirectoryEntry() (result cm.Result[OptionDirectoryEntryShape, cm.Option[DirectoryEntry], ErrorCode]) {
 	self0 := cm.Reinterpret[uint32](self)
-	wasmimport_DirectoryEntryStreamReadDirectoryEntry((uint32)(self0), &result)
+	wasmimport_DirectoryEntryStreamReadDirectoryEntry((uint32)(self0), unsafe.Pointer(&result))
 	return
 }
 

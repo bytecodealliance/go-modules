@@ -3,7 +3,7 @@
 package poll
 
 import (
-	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // This file contains wasmimport and wasmexport declarations for "wasi:io@0.2.0".
@@ -22,4 +22,4 @@ func wasmimport_PollableReady(self0 uint32) (result0 uint32)
 
 //go:wasmimport wasi:io/poll@0.2.0 poll
 //go:noescape
-func wasmimport_Poll(in0 *Pollable, in1 uint32, result *cm.List[uint32])
+func wasmimport_Poll(in0 *Pollable, in1 uint32, result unsafe.Pointer)

@@ -13,6 +13,7 @@ import (
 	"go.bytecodealliance.org/cm"
 	ioerror "tests/generated/wasi/io/v0.2.0/error"
 	"tests/generated/wasi/io/v0.2.0/poll"
+	"unsafe"
 )
 
 // Error represents the imported type alias "wasi:io/streams@0.2.0#error".
@@ -110,7 +111,7 @@ func (self InputStream) ResourceDrop() {
 func (self InputStream) BlockingRead(len_ uint64) (result cm.Result[cm.List[uint8], cm.List[uint8], StreamError]) {
 	self0 := cm.Reinterpret[uint32](self)
 	len0 := (uint64)(len_)
-	wasmimport_InputStreamBlockingRead((uint32)(self0), (uint64)(len0), &result)
+	wasmimport_InputStreamBlockingRead((uint32)(self0), (uint64)(len0), unsafe.Pointer(&result))
 	return
 }
 
@@ -164,7 +165,7 @@ func (self InputStream) BlockingSkip(len_ uint64) (result cm.Result[uint64, uint
 func (self InputStream) Read(len_ uint64) (result cm.Result[cm.List[uint8], cm.List[uint8], StreamError]) {
 	self0 := cm.Reinterpret[uint32](self)
 	len0 := (uint64)(len_)
-	wasmimport_InputStreamRead((uint32)(self0), (uint64)(len0), &result)
+	wasmimport_InputStreamRead((uint32)(self0), (uint64)(len0), unsafe.Pointer(&result))
 	return
 }
 

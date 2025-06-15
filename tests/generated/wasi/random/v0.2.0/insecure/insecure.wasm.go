@@ -3,14 +3,14 @@
 package insecure
 
 import (
-	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // This file contains wasmimport and wasmexport declarations for "wasi:random@0.2.0".
 
 //go:wasmimport wasi:random/insecure@0.2.0 get-insecure-random-bytes
 //go:noescape
-func wasmimport_GetInsecureRandomBytes(len0 uint64, result *cm.List[uint8])
+func wasmimport_GetInsecureRandomBytes(len0 uint64, result unsafe.Pointer)
 
 //go:wasmimport wasi:random/insecure@0.2.0 get-insecure-random-u64
 //go:noescape

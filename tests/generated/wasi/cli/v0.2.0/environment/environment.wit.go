@@ -5,6 +5,7 @@ package environment
 
 import (
 	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // GetEnvironment represents the imported function "get-environment".
@@ -22,7 +23,7 @@ import (
 //
 //go:nosplit
 func GetEnvironment() (result cm.List[[2]string]) {
-	wasmimport_GetEnvironment(&result)
+	wasmimport_GetEnvironment(unsafe.Pointer(&result))
 	return
 }
 
@@ -34,7 +35,7 @@ func GetEnvironment() (result cm.List[[2]string]) {
 //
 //go:nosplit
 func GetArguments() (result cm.List[string]) {
-	wasmimport_GetArguments(&result)
+	wasmimport_GetArguments(unsafe.Pointer(&result))
 	return
 }
 
@@ -47,6 +48,6 @@ func GetArguments() (result cm.List[string]) {
 //
 //go:nosplit
 func InitialCWD() (result cm.Option[string]) {
-	wasmimport_InitialCWD(&result)
+	wasmimport_InitialCWD(unsafe.Pointer(&result))
 	return
 }
