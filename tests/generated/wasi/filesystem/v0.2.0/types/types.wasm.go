@@ -4,6 +4,7 @@ package types
 
 import (
 	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // This file contains wasmimport and wasmexport declarations for "wasi:filesystem@0.2.0".
@@ -54,7 +55,7 @@ func wasmimport_DescriptorOpenAt(self0 uint32, pathFlags0 uint32, path0 *uint8, 
 
 //go:wasmimport wasi:filesystem/types@0.2.0 [method]descriptor.read
 //go:noescape
-func wasmimport_DescriptorRead(self0 uint32, length0 uint64, offset0 uint64, result *cm.Result[TupleListU8BoolShape, cm.Tuple[cm.List[uint8], bool], ErrorCode])
+func wasmimport_DescriptorRead(self0 uint32, length0 uint64, offset0 uint64, result unsafe.Pointer)
 
 //go:wasmimport wasi:filesystem/types@0.2.0 [method]descriptor.read-directory
 //go:noescape
@@ -66,7 +67,7 @@ func wasmimport_DescriptorReadViaStream(self0 uint32, offset0 uint64, result *cm
 
 //go:wasmimport wasi:filesystem/types@0.2.0 [method]descriptor.readlink-at
 //go:noescape
-func wasmimport_DescriptorReadLinkAt(self0 uint32, path0 *uint8, path1 uint32, result *cm.Result[string, string, ErrorCode])
+func wasmimport_DescriptorReadLinkAt(self0 uint32, path0 *uint8, path1 uint32, result unsafe.Pointer)
 
 //go:wasmimport wasi:filesystem/types@0.2.0 [method]descriptor.remove-directory-at
 //go:noescape
@@ -126,7 +127,7 @@ func wasmimport_DirectoryEntryStreamResourceDrop(self0 uint32)
 
 //go:wasmimport wasi:filesystem/types@0.2.0 [method]directory-entry-stream.read-directory-entry
 //go:noescape
-func wasmimport_DirectoryEntryStreamReadDirectoryEntry(self0 uint32, result *cm.Result[OptionDirectoryEntryShape, cm.Option[DirectoryEntry], ErrorCode])
+func wasmimport_DirectoryEntryStreamReadDirectoryEntry(self0 uint32, result unsafe.Pointer)
 
 //go:wasmimport wasi:filesystem/types@0.2.0 filesystem-error-code
 //go:noescape

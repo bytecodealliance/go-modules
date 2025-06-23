@@ -4,6 +4,7 @@ package udp
 
 import (
 	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // This file contains wasmimport and wasmexport declarations for "wasi:sockets@0.2.0".
@@ -70,7 +71,7 @@ func wasmimport_IncomingDatagramStreamResourceDrop(self0 uint32)
 
 //go:wasmimport wasi:sockets/udp@0.2.0 [method]incoming-datagram-stream.receive
 //go:noescape
-func wasmimport_IncomingDatagramStreamReceive(self0 uint32, maxResults0 uint64, result *cm.Result[cm.List[IncomingDatagram], cm.List[IncomingDatagram], ErrorCode])
+func wasmimport_IncomingDatagramStreamReceive(self0 uint32, maxResults0 uint64, result unsafe.Pointer)
 
 //go:wasmimport wasi:sockets/udp@0.2.0 [method]incoming-datagram-stream.subscribe
 //go:noescape
@@ -86,7 +87,7 @@ func wasmimport_OutgoingDatagramStreamCheckSend(self0 uint32, result *cm.Result[
 
 //go:wasmimport wasi:sockets/udp@0.2.0 [method]outgoing-datagram-stream.send
 //go:noescape
-func wasmimport_OutgoingDatagramStreamSend(self0 uint32, datagrams0 *OutgoingDatagram, datagrams1 uint32, result *cm.Result[uint64, uint64, ErrorCode])
+func wasmimport_OutgoingDatagramStreamSend(self0 uint32, datagrams0 unsafe.Pointer, datagrams1 uint32, result *cm.Result[uint64, uint64, ErrorCode])
 
 //go:wasmimport wasi:sockets/udp@0.2.0 [method]outgoing-datagram-stream.subscribe
 //go:noescape

@@ -8,6 +8,7 @@ package poll
 
 import (
 	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // Pollable represents the imported resource "wasi:io/poll@0.2.0#pollable".
@@ -87,6 +88,6 @@ func (self Pollable) Ready() (result bool) {
 //go:nosplit
 func Poll(in cm.List[Pollable]) (result cm.List[uint32]) {
 	in0, in1 := cm.LowerList(in)
-	wasmimport_Poll((*Pollable)(in0), (uint32)(in1), &result)
+	wasmimport_Poll((*Pollable)(in0), (uint32)(in1), unsafe.Pointer(&result))
 	return
 }

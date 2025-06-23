@@ -10,6 +10,7 @@ package random
 
 import (
 	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // GetRandomBytes represents the imported function "get-random-bytes".
@@ -32,7 +33,7 @@ import (
 //go:nosplit
 func GetRandomBytes(len_ uint64) (result cm.List[uint8]) {
 	len0 := (uint64)(len_)
-	wasmimport_GetRandomBytes((uint64)(len0), &result)
+	wasmimport_GetRandomBytes((uint64)(len0), unsafe.Pointer(&result))
 	return
 }
 
