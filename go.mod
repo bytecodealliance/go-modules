@@ -9,7 +9,7 @@ require (
 	github.com/tetratelabs/wazero v1.9.0
 	github.com/urfave/cli/v3 v3.3.8
 	go.bytecodealliance.org/cm v0.3.0
-	golang.org/x/mod v0.24.0
+	golang.org/x/mod v0.25.0
 	golang.org/x/tools v0.33.0
 )
 
