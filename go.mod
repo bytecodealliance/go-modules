@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/coreos/go-semver v0.3.1
-	github.com/regclient/regclient v0.8.3
+	github.com/regclient/regclient v0.9.0
 	github.com/sergi/go-diff v1.3.1
 	github.com/tetratelabs/wazero v1.9.0
 	github.com/urfave/cli/v3 v3.3.8
