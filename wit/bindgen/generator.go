@@ -2436,7 +2436,34 @@ func (g *generator) newPackage(w *wit.World, i *wit.Interface, name string) (*ge
 	return pkg, nil
 }
 
-var replacer = strings.NewReplacer("/", "-", ":", "-", "@", "-v", ".", "", "%", "")
+var replacer = strings.NewReplacer(
+	"/", "-",
+	":", "-",
+	"@", "-v",
+	".", "",
+	"%", "",
+	// The below replacements will ensure that worlds generated from the package name
+	// follow WIT identifier rules disallowing words to begin with a digit
+	// and still allow package names to use semver. For example, the package
+	// `wasi:io/imports@0.2.0-rc-2023-11-10` will be used to generate the following world:
+	//
+	// world wasi-io-WORLD-imports-v020-rc-x2023-x11-x10`{
+	// ...
+	///}
+	///
+	// See https://component-model.bytecodealliance.org/design/wit.html#identifiers
+	// and https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md#package-names
+	"-0", "-x0",
+	"-1", "-x1",
+	"-2", "-x2",
+	"-3", "-x3",
+	"-4", "-x4",
+	"-5", "-x5",
+	"-6", "-x6",
+	"-7", "-x7",
+	"-8", "-x8",
+	"-9", "-x9",
+)
 
 // componentEmbed runs generated WIT through wasm-tools to generate a wasm file with a component-type custom section.
 func (g *generator) componentEmbed(witData string) ([]byte, error) {
