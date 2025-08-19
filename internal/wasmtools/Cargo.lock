@@ -572,9 +572,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-encoder"
-version = "0.232.0"
+version = "0.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a447e61e38d1226b57e4628edadff36d16760be24a343712ba236b5106c95156"
+checksum = "724fccfd4f3c24b7e589d333fc0429c68042897a7e8a5f8694f31792471841e7"
 dependencies = [
  "leb128fmt",
  "wasmparser",
@@ -582,9 +582,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-metadata"
-version = "0.232.0"
+version = "0.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71aba7991cf9922a097b2dcc4c36ba5bc207339bdcd3a515530fc2555f01e8eb"
+checksum = "c909f94a49a8de3365f3c0344f064818f1e369ff1740c5b04f455f85d454768e"
 dependencies = [
  "anyhow",
  "indexmap",
@@ -594,9 +594,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-tools"
-version = "1.232.0"
+version = "1.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1c5728289671a031fa63c1b65ad0326b693a79e49ed62a458ab563fbf91f1bc4"
+checksum = "16e76bdaa9eeaf087ded2ff27fc13256ab1f582c6473ad9c0911930b7ae29ce6"
 dependencies = [
  "anyhow",
  "bytesize",
@@ -626,9 +626,9 @@ dependencies = [
 
 [[package]]
 name = "wasmparser"
-version = "0.232.0"
+version = "0.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "917739b33bb1eb0e9a49bcd2637a351931be4578d0cc4d37b908d7a797784fbb"
+checksum = "a9b1e81f3eb254cf7404a82cee6926a4a3ccc5aad80cc3d43608a070c67aa1d7"
 dependencies = [
  "bitflags",
  "hashbrown",
@@ -638,9 +638,9 @@ dependencies = [
 
 [[package]]
 name = "wasmprinter"
-version = "0.232.0"
+version = "0.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3be346255070ba58f65b24826bc94643dca065e797db7abb83e90965d086eba3"
+checksum = "2df225df06a6df15b46e3f73ca066ff92c2e023670969f7d50ce7d5e695abbb1"
 dependencies = [
  "anyhow",
  "termcolor",
@@ -649,9 +649,9 @@ dependencies = [
 
 [[package]]
 name = "wast"
-version = "232.0.0"
+version = "236.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b5a22bfb0c309f5cf4b0cfa4fae77801e52570e88bff1344c1b7673a9977954"
+checksum = "d3bec4b4db9c6808d394632fd4b0cd4654c32c540bd3237f55ee6a40fff6e51f"
 dependencies = [
  "bumpalo",
  "gimli",
@@ -663,9 +663,9 @@ dependencies = [
 
 [[package]]
 name = "wat"
-version = "1.232.0"
+version = "1.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e2054d3da4289c8634a6ed0dd177e066518f45772c521b6959f5d6109f4c210"
+checksum = "64475e2f77d6071ce90624098fc236285ddafa8c3ea1fb386f2c4154b6c2bbdb"
 dependencies = [
  "wast",
 ]
@@ -763,9 +763,9 @@ dependencies = [
 
 [[package]]
 name = "wit-component"
-version = "0.232.0"
+version = "0.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d1d7a3444f5039b4461a66dc085d749a832e518a86e8c7498d6fdd9df776ed0"
+checksum = "3622959ed7ed6341c38e5aa35af243632534b0a36226852faa802939ce11e00f"
 dependencies = [
  "anyhow",
  "bitflags",
@@ -784,9 +784,9 @@ dependencies = [
 
 [[package]]
 name = "wit-encoder"
-version = "0.232.0"
+version = "0.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "83f9e66a7d9d46f593b03a7082fdb81e2685841c28f12c806dfff23820698942"
+checksum = "0a9d3d787830b9fb133659bfe8e649f5641cd7f6da9ddb4e534a22ed45283e2c"
 dependencies = [
  "id-arena",
  "pretty_assertions",
@@ -797,9 +797,9 @@ dependencies = [
 
 [[package]]
 name = "wit-parser"
-version = "0.232.0"
+version = "0.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "00a0e031533e3f9082057b09b346f76d3af12a714feccbe8d32f926254319d86"
+checksum = "16e4833a20cd6e85d6abfea0e63a399472d6f88c6262957c17f546879a80ba15"
 dependencies = [
  "anyhow",
  "id-arena",
