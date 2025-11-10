@@ -6,7 +6,7 @@ require (
 	github.com/coreos/go-semver v0.3.1
 	github.com/regclient/regclient v0.8.3
 	github.com/sergi/go-diff v1.3.1
-	github.com/tetratelabs/wazero v1.9.0
+	github.com/tetratelabs/wazero v1.10.0
 	github.com/urfave/cli/v3 v3.3.8
 	go.bytecodealliance.org/cm v0.3.0
 	golang.org/x/mod v0.24.0
