@@ -1,6 +1,6 @@
 module go.bytecodealliance.org
 
-go 1.23.0
+go 1.24.0
 
 require (
 	github.com/coreos/go-semver v0.3.1
@@ -9,8 +9,8 @@ require (
 	github.com/tetratelabs/wazero v1.9.0
 	github.com/urfave/cli/v3 v3.3.8
 	go.bytecodealliance.org/cm v0.3.0
-	golang.org/x/mod v0.24.0
-	golang.org/x/tools v0.33.0
+	golang.org/x/mod v0.30.0
+	golang.org/x/tools v0.39.0
 )
 
 require (
@@ -19,6 +19,6 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/ulikunitz/xz v0.5.12 // indirect
-	golang.org/x/sync v0.14.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/sync v0.18.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
 )
