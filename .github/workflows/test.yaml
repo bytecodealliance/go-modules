@@ -173,3 +173,48 @@ jobs:
 
       - name: Verify repo is unchanged
         run: git diff --exit-code HEAD
+
+  test-wasihttp:
+    name: Test wasihttp
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        go-version: ["1.23", "1.24"]
+        tinygo-version: ["0.34.0", "0.35.0", "0.36.0"]
+        exclude:
+          - go-version: "1.24"
+            tinygo-version: "0.34.0"
+          - go-version: "1.24"
+            tinygo-version: "0.35.0"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Set up TinyGo
+        uses: acifani/setup-tinygo@v2
+        with:
+          tinygo-version: ${{ matrix.tinygo-version }}
+
+      - name: Set up wasm-tools
+        uses: bytecodealliance/actions/wasm-tools/setup@v1
+        with:
+          version: ${{ env.wasm-tools-version }}
+
+      - name: Set up Wasmtime
+        uses: bytecodealliance/actions/wasmtime/setup@v1
+        with:
+          version: ${{ env.wasmtime-version }}
+
+      - name: Test wasihttp basic
+        run: ./scripts/test-wasihttp-basic.sh
+
+      - name: Test wasihttp roundtrip
+        run: ./scripts/test-wasihttp-roundtrip.sh

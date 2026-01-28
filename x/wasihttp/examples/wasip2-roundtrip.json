@@ -1,0 +1,6 @@
+{
+	"inherits": ["wasip2"],
+	"wit-package": "./roundtrip.wit",
+	"wit-world": "go:http/roundtrip",
+	"emulator": "wasmtime run -Shttp -Sinherit-network -Sinherit-env {}"
+}
