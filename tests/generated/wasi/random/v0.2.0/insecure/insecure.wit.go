@@ -10,6 +10,7 @@ package insecure
 
 import (
 	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // GetInsecureRandomBytes represents the imported function "get-insecure-random-bytes".
@@ -28,7 +29,7 @@ import (
 //go:nosplit
 func GetInsecureRandomBytes(len_ uint64) (result cm.List[uint8]) {
 	len0 := (uint64)(len_)
-	wasmimport_GetInsecureRandomBytes((uint64)(len0), &result)
+	wasmimport_GetInsecureRandomBytes((uint64)(len0), unsafe.Pointer(&result))
 	return
 }
 

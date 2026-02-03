@@ -29,7 +29,7 @@ func Some[T any](v T) Option[T] {
 // followed by storage for the associated type T.
 type option[T any] struct {
 	_      HostLayout
-	isSome uint8
+	isSome uint32
 	some   T
 }
 
@@ -45,6 +45,10 @@ func (o *option[T]) Some() *T {
 		return &o.some
 	}
 	return nil
+}
+
+func (o option[T]) IsSome() bool {
+	return o.isSome == 1
 }
 
 // Value returns T if o represents the some case,

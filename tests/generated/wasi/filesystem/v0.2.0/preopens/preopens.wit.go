@@ -6,6 +6,7 @@ package preopens
 import (
 	"go.bytecodealliance.org/cm"
 	"tests/generated/wasi/filesystem/v0.2.0/types"
+	"unsafe"
 )
 
 // Descriptor represents the imported type alias "wasi:filesystem/preopens@0.2.0#descriptor".
@@ -21,6 +22,6 @@ type Descriptor = types.Descriptor
 //
 //go:nosplit
 func GetDirectories() (result cm.List[cm.Tuple[Descriptor, string]]) {
-	wasmimport_GetDirectories(&result)
+	wasmimport_GetDirectories(unsafe.Pointer(&result))
 	return
 }

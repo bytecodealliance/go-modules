@@ -5,6 +5,7 @@ package ioerror
 
 import (
 	"go.bytecodealliance.org/cm"
+	"unsafe"
 )
 
 // Error represents the imported resource "wasi:io/error@0.2.0#error".
@@ -58,6 +59,6 @@ func (self Error) ResourceDrop() {
 //go:nosplit
 func (self Error) ToDebugString() (result string) {
 	self0 := cm.Reinterpret[uint32](self)
-	wasmimport_ErrorToDebugString((uint32)(self0), &result)
+	wasmimport_ErrorToDebugString((uint32)(self0), unsafe.Pointer(&result))
 	return
 }

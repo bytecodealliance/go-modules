@@ -692,6 +692,10 @@ func (g *generator) typeDefRep(file *gen.File, dir wit.Direction, t *wit.TypeDef
 }
 
 func (g *generator) pointerRep(file *gen.File, dir wit.Direction, p *wit.Pointer) string {
+	if wit.HasPointer(p.Type) {
+		file.Import("unsafe")
+		return "unsafe.Pointer"
+ 	}
 	return "*" + g.typeRep(file, dir, p.Type)
 }
 
@@ -1882,8 +1886,13 @@ func (g *generator) defineImportedFunction(decl *funcDecl) error {
 		t := derefPointer(p.typ)
 		// TODO: this logic is ugly
 		if t != nil && (t == compoundParams.typ || t == compoundResults.typ || p.typ == pointerResult.typ) {
-			b.WriteRune('&')
-			b.WriteString(p.name)
+			if wit.HasPointer(t) {
+				file.Import("unsafe")
+				stringio.Write(&b, "unsafe.Pointer(&", p.name, ")")
+			} else {
+				b.WriteRune('&')
+				b.WriteString(p.name)
+			}
 		} else {
 			b.WriteString(g.cast(file, p.dir, p.typ, p.typ, p.name))
 		}
@@ -2010,7 +2019,12 @@ func (g *generator) defineExportedFunction(decl *funcDecl) error {
 		i := 0
 		for _, p := range callParams {
 			if i < len(decl.wasmFunc.params) && p.typ == derefPointer(decl.wasmFunc.params[i].typ) {
-				stringio.Write(wasmFile, p.name, " := *", decl.wasmFunc.params[i].name, "\n")
+				stringio.Write(wasmFile, p.name, " := *")
+				if wit.HasPointer(p.typ) {
+					stringio.Write(wasmFile, "(*", g.typeRep(file, dir, p.typ), ")(", decl.wasmFunc.params[i].name, ")\n")
+				} else {
+					stringio.Write(wasmFile, decl.wasmFunc.params[i].name, "\n")
+				}
 				i++
 				continue
 			}
@@ -2022,6 +2036,8 @@ func (g *generator) defineExportedFunction(decl *funcDecl) error {
 			stringio.Write(wasmFile, p.name, " := ", g.liftType(wasmFile, p.dir, p.typ, input), "\n")
 			i += len(flat)
 		}
+	} else {
+		stringio.Write(wasmFile, "params_ := (*", decl.wasmFunc.name, "_params", ")(", compoundParams.name, ")\n")
 	}
 
 	// Emit call to caller-defined Go function
@@ -2059,7 +2075,7 @@ func (g *generator) defineExportedFunction(decl *funcDecl) error {
 			if i > 0 {
 				wasmFile.WriteString(", ")
 			}
-			stringio.Write(wasmFile, compoundParams.name, ".", fieldName(f.Name, false))
+			stringio.Write(wasmFile, "params_.", fieldName(f.Name, false))
 		}
 	} else {
 		for i, p := range callParams {
@@ -2081,7 +2097,12 @@ func (g *generator) defineExportedFunction(decl *funcDecl) error {
 			if i < len(decl.wasmFunc.results) {
 				wr := decl.wasmFunc.results[i]
 				if r.typ == derefPointer(wr.typ) {
-					stringio.Write(wasmFile, wr.name, " = &", r.name, "\n")
+					if wit.HasPointer(r.typ) {
+						wasmFile.Import("unsafe")
+						stringio.Write(wasmFile, wr.name, " = unsafe.Pointer(&", r.name, ")\n")
+					} else {
+						stringio.Write(wasmFile, wr.name, " = &", r.name, "\n")
+					}
 					i++
 					continue
 				}

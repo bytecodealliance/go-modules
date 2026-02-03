@@ -7,6 +7,7 @@ import (
 	"go.bytecodealliance.org/cm"
 	"tests/generated/wasi/io/v0.2.0/poll"
 	"tests/generated/wasi/sockets/v0.2.0/network"
+	"unsafe"
 )
 
 // Pollable represents the imported type alias "wasi:sockets/udp@0.2.0#pollable".
@@ -445,7 +446,7 @@ func (self IncomingDatagramStream) ResourceDrop() {
 func (self IncomingDatagramStream) Receive(maxResults uint64) (result cm.Result[cm.List[IncomingDatagram], cm.List[IncomingDatagram], ErrorCode]) {
 	self0 := cm.Reinterpret[uint32](self)
 	maxResults0 := (uint64)(maxResults)
-	wasmimport_IncomingDatagramStreamReceive((uint32)(self0), (uint64)(maxResults0), &result)
+	wasmimport_IncomingDatagramStreamReceive((uint32)(self0), (uint64)(maxResults0), unsafe.Pointer(&result))
 	return
 }
 
@@ -562,7 +563,7 @@ func (self OutgoingDatagramStream) CheckSend() (result cm.Result[uint64, uint64,
 func (self OutgoingDatagramStream) Send(datagrams cm.List[OutgoingDatagram]) (result cm.Result[uint64, uint64, ErrorCode]) {
 	self0 := cm.Reinterpret[uint32](self)
 	datagrams0, datagrams1 := cm.LowerList(datagrams)
-	wasmimport_OutgoingDatagramStreamSend((uint32)(self0), (*OutgoingDatagram)(datagrams0), (uint32)(datagrams1), &result)
+	wasmimport_OutgoingDatagramStreamSend((uint32)(self0), (unsafe.Pointer)(datagrams0), (uint32)(datagrams1), &result)
 	return
 }
 
