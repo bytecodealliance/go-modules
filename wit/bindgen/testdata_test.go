@@ -9,7 +9,6 @@ import (
 	"io/fs"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -86,7 +85,7 @@ func validateGeneratedGo(t *testing.T, res *wit.Resolve, origin string) {
 		return
 	}
 
-	dir := path.Join(generatedPath, origin)
+	dir := filepath.Join(generatedPath, origin)
 	err := os.MkdirAll(dir, fs.ModePerm)
 	if err != nil {
 		t.Error(err)
@@ -218,8 +217,12 @@ func TestGenerateTestdata(t *testing.T) {
 		return
 	}
 	err := loadTestdata(func(path string, res *wit.Resolve) error {
+		relative, err := filepath.Rel(testdataPath, path)
+		if err != nil {
+			return err
+		}
 		t.Run(path, func(t *testing.T) {
-			origin := strings.TrimSuffix(strings.TrimPrefix(path, testdataPath), ".wit.json")
+			origin := strings.TrimSuffix(relative, ".wit.json")
 			validateGeneratedGo(t, res, origin)
 		})
 		return nil

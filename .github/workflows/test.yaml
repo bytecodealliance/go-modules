@@ -40,10 +40,11 @@ jobs:
   # Test with Go
   test-go:
     name: Test with Go
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest]
         go-version: ["1.23", "1.24"]
     steps:
       - name: Checkout repo

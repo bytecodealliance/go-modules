@@ -61,9 +61,9 @@ func loadWIT(path string, reader io.Reader) (*Resolve, error) {
 
 	if path != "" {
 		path = strings.TrimPrefix(path, "./")
-		args = append(args, path)
+		args = append(args, filepath.ToSlash(path))
 		dir := filepath.Dir(path)
-		fsMap[dir] = os.DirFS(dir)
+		fsMap[filepath.ToSlash(dir)] = os.DirFS(dir)
 	} else {
 		stdin = reader
 	}
@@ -71,6 +71,7 @@ func loadWIT(path string, reader io.Reader) (*Resolve, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer wasmTools.Close(ctx)
 	stdout := &bytes.Buffer{}
 	stderr := &bytes.Buffer{}
 	err = wasmTools.Run(ctx, stdin, stdout, stderr, fsMap, args...)
