@@ -35,17 +35,12 @@ func PackagePath(dir string) (string, error) {
 		file = filepath.Join(dir, "go.mod")
 		info, err := os.Stat(file)
 		if err != nil {
-			if dir == "/" {
+			parent := filepath.Dir(dir)
+			if parent == dir {
 				return "", errors.New("unable to locate a go.mod file")
 			}
-			// Pop up to parent dir
-			var rest string
-			dir, rest = filepath.Split(dir)
-			if dir == "" {
-				return "", errors.New("unable to locate a go.mod file")
-			}
-			dir = filepath.Clean(dir)
-			subdirs = path.Join(rest, subdirs)
+			subdirs = path.Join(filepath.Base(dir), subdirs)
+			dir = parent
 			continue
 		}
 		if info.IsDir() {

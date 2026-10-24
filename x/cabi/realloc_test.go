@@ -1,72 +1,118 @@
 package cabi
 
 import (
+	"fmt"
 	"slices"
 	"testing"
 	"unsafe"
 )
 
-func TestRealloc(t *testing.T) {
-	const threshold = 16
-
-	tests := []struct {
-		name    string
-		ptr     uintptr
-		size    uintptr
-		align   uintptr
-		newsize uintptr
-		want    uintptr
-	}{
-		{"nil", 0, 0, 1, 0, 0},
-		{"nil with align", 0, 0, 2, 0, 0},
-		{"align to 2", 1, 0, 2, 0, 2},
-		{"align to 2", 1, 0, 2, 0, 2},
-		{"align to 4", 1, 0, 4, 0, 4},
-		{"align to 8", 3, 0, 8, 0, 8},
-		{"align to 16", 9, 0, 16, 0, 16},
-		{"alloc 100 bytes", 0, 0, 1, 100, sliceData(hundred)},
-		{"preserve 5 bytes", stringData("hello"), 5, 1, 5, stringData("hello")},
-		{"shrink 8 bytes to 4", stringData("fourfour"), 8, 1, 4, stringData("four")},
-		{"expand 4 bytes to 8", stringData("zero"), 4, 1, 8, stringData("zero\u0000\u0000\u0000\u0000")},
-		{"cut down lorem ipsum", stringData(lorem), 4, 1, 200, stringData(lorem[:200])},
+func TestOffset(t *testing.T) {
+	for _, align := range []uintptr{1, 2, 4, 8, 16} {
+		for _, ptr := range []uintptr{0, 1, 3, 9, 16, ^uintptr(0) - 1, ^uintptr(0)} {
+			want := (align - ptr%align) % align
+			if got := offset(ptr, align); got != want {
+				t.Errorf("offset(%d, %d) = %d, want %d", ptr, align, got, want)
+			}
+		}
 	}
+}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := realloc(unsafePointer(tt.ptr), tt.size, tt.align, tt.newsize)
-			if (tt.want < threshold && uintptr(got) != tt.want) || (tt.want >= threshold && uintptr(got) < threshold) {
-				t.Errorf("realloc(%d, %d, %d, %d): %d, expected %d",
-					tt.ptr, tt.size, tt.align, tt.newsize, got, tt.want)
-			}
-			if uintptr(got)%tt.align != 0 {
-				t.Errorf("expected ptr aligned to %d, got %d", tt.align, uintptr(got)&tt.align)
-			}
-			if uintptr(got) < threshold {
-				return // it didn’t allocate
-			}
-			if tt.ptr == 0 {
-				wants := unsafe.Slice((*byte)(unsafePointer(tt.want)), tt.newsize)
-				gots := unsafe.Slice((*byte)(got), tt.newsize)
-				if slices.Compare(wants, gots) != 0 {
-					t.Errorf("expected %v, got %v", wants, gots)
+func TestAlloc(t *testing.T) {
+	for _, align := range []uintptr{0, 1, 2, 3, 4, 8, 16, 32} {
+		wantAlign := align
+		if align != 1 && align != 2 && align != 4 && align != 8 {
+			wantAlign = 16
+		}
+		for _, size := range []uintptr{0, 1, 3, 7, 9, 17, 100, 257} {
+			t.Run(fmt.Sprintf("align%d/size%d", align, size), func(t *testing.T) {
+				ptr := alloc(size, align)
+				if uintptr(ptr)%wantAlign != 0 {
+					t.Fatalf("allocation %p is not aligned to %d", ptr, wantAlign)
 				}
-			}
+				span := unsafe.Slice((*byte)(ptr), size)
+				for i := range span {
+					span[i] = byte(i + 1)
+				}
+				for i, got := range span {
+					if want := byte(i + 1); got != want {
+						t.Fatalf("byte %d = %d, want %d", i, got, want)
+					}
+				}
+			})
+		}
+	}
+}
+
+func TestAllocOverflow(t *testing.T) {
+	for _, align := range []uintptr{1, 2, 4, 8, 16} {
+		t.Run(fmt.Sprintf("align%d", align), func(t *testing.T) {
+			defer func() {
+				if recover() == nil {
+					t.Error("oversized allocation did not panic")
+				}
+			}()
+			alloc(^uintptr(0), align)
 		})
 	}
 }
 
-var hundred = make([]byte, 100)
-var lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat arcu eu est tristique suscipit. Nulla laoreet purus magna, at feugiat tortor fermentum non. Integer semper et magna id placerat. Quisque purus lorem, mollis vel convallis eu, ullamcorper sit amet justo. Duis tempus gravida lacus, vel dapibus augue. Nunc sed condimentum lacus. Cras vulputate cursus dictum. Etiam felis metus, volutpat id luctus ac, ultrices nec metus. Proin sagittis nulla a pretium sagittis. Nullam tristique sapien sed semper faucibus. Fusce condimentum nulla dui. Donec egestas nunc in blandit mollis.`
-
-// Appease vet, see https://github.com/golang/go/issues/58625
-func unsafePointer(p uintptr) unsafe.Pointer {
-	return *(*unsafe.Pointer)(unsafe.Pointer(&p))
+func TestRealloc(t *testing.T) {
+	for _, align := range []uintptr{1, 2, 4, 8, 16} {
+		for _, sizes := range [][2]uintptr{{0, 0}, {0, 100}, {17, 17}, {17, 7}, {7, 100}, {17, 0}} {
+			size, newsize := sizes[0], sizes[1]
+			t.Run(fmt.Sprintf("align%d/%dto%d", align, size, newsize), func(t *testing.T) {
+				var ptr unsafe.Pointer
+				if size > 0 {
+					ptr = alloc(size, align)
+				}
+				original := unsafe.Slice((*byte)(ptr), size)
+				for i := range original {
+					original[i] = byte(i + 1)
+				}
+				want := slices.Clone(original[:min(size, newsize)])
+				got := realloc(ptr, size, align, newsize)
+				if newsize == 0 {
+					if got != nil {
+						t.Fatalf("zero-sized reallocation returned %p", got)
+					}
+					return
+				}
+				if uintptr(got)%align != 0 {
+					t.Fatalf("reallocation %p is not aligned to %d", got, align)
+				}
+				span := unsafe.Slice((*byte)(got), newsize)
+				if !slices.Equal(span[:len(want)], want) {
+					t.Fatalf("reallocation prefix = %v, want %v", span[:len(want)], want)
+				}
+				for i := range span {
+					span[i] = byte(i + 1)
+				}
+				if newsize <= size && got != ptr {
+					t.Error("aligned shrinking allocation moved")
+				}
+			})
+		}
+	}
 }
 
-func sliceData[T any](s []T) uintptr {
-	return uintptr(unsafe.Pointer(unsafe.SliceData(s)))
-}
-
-func stringData(s string) uintptr {
-	return uintptr(unsafe.Pointer(unsafe.StringData(s)))
+func TestReallocRealignedShrink(t *testing.T) {
+	for _, align := range []uintptr{2, 4, 8, 16} {
+		t.Run(fmt.Sprintf("align%d", align), func(t *testing.T) {
+			ptr := unsafe.Add(alloc(33, align), 1)
+			original := unsafe.Slice((*byte)(ptr), 32)
+			for i := range original {
+				original[i] = byte(i + 1)
+			}
+			want := slices.Clone(original[:17])
+			got := realloc(ptr, 32, align, 17)
+			if uintptr(got)%align != 0 {
+				t.Fatalf("reallocation %p is not aligned to %d", got, align)
+			}
+			span := unsafe.Slice((*byte)(got), 17)
+			if !slices.Equal(span, want) {
+				t.Fatalf("realigned allocation = %v, want %v", span, want)
+			}
+		})
+	}
 }

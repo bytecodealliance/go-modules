@@ -12,7 +12,7 @@ jobs:
   build:
     name: Build binaries
     permissions:
-      contents: write
+      contents: read
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,10 +25,10 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
 
@@ -49,7 +49,7 @@ jobs:
           rm wit-bindgen-go
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wit-bindgen-go_${{ matrix.goos }}_${{ matrix.goarch }}
           path: build/wit-bindgen-go-${{ matrix.goos }}-${{ matrix.goarch }}.tgz
@@ -57,14 +57,16 @@ jobs:
 
   release:
     name: Create GitHub release
+    permissions:
+      contents: write
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: build/
           merge-multiple: true # all artifacts are downloaded to this directory
@@ -72,8 +74,8 @@ jobs:
       - name: Extract release notes
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          cd $GITHUB_WORKSPACE
-          ./scripts/extract-changelog.sh $TAG_NAME > RELEASE_NOTES.md
+          cd "$GITHUB_WORKSPACE"
+          ./scripts/extract-changelog.sh "$TAG_NAME" > RELEASE_NOTES.md
           cat RELEASE_NOTES.md
 
       - name: Create release
@@ -83,12 +85,12 @@ jobs:
           ls -R build/
           TAG_NAME=${GITHUB_REF#refs/tags/}
           if [[ "$TAG_NAME" =~ .+-pre.* ]]; then
-            PRERELEASE_ARGS="--prerelease --latest=false"
+            PRERELEASE_ARGS=(--prerelease --latest=false)
           else
-            PRERELEASE_ARGS=""
+            PRERELEASE_ARGS=()
           fi
           gh release create "${{ github.ref_name }}" \
             --notes-file RELEASE_NOTES.md \
             --title "${{ github.ref_name }}" \
-            $PRERELEASE_ARGS \
+            "${PRERELEASE_ARGS[@]}" \
             build/*

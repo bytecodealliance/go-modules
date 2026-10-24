@@ -12,7 +12,11 @@ on:
         - 'docs/**'
         - 'LICENSE'
 
+permissions:
+  contents: read
+
 env:
+  GOTOOLCHAIN: local
   go-modules: ./... ./cm/...
   wasm-tools-version: "1.230.0"
   wasmtime-version: "26.0.0"
@@ -25,12 +29,12 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
 
@@ -40,19 +44,20 @@ jobs:
   # Test with Go
   test-go:
     name: Test with Go
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     strategy:
       matrix:
-        go-version: ["1.23", "1.24"]
+        os: [ubuntu-latest, windows-latest]
+        go-version: ["1.26", "1.27"]
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version: ${{ matrix.go-version }}
 
@@ -77,24 +82,21 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        go-version: ["1.23", "1.24"]
-        tinygo-version: ["0.35.0", "0.36.0", "0.37.0"]
-        exclude:
-          - go-version: "1.24"
-            tinygo-version: "0.35.0"
+        go-version: ["1.26", "1.27"]
+        tinygo-version: ["0.43.0"]
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version: ${{ matrix.go-version }}
 
       - name: Set up TinyGo
-        uses: acifani/setup-tinygo@v2
+        uses: acifani/setup-tinygo@v3
         with:
           tinygo-version: ${{ matrix.tinygo-version }}
 
@@ -111,24 +113,21 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        go-version: ["1.23", "1.24"]
-        tinygo-version: ["0.35.0", "0.36.0", "0.37.0"]
-        exclude:
-          - go-version: "1.24"
-            tinygo-version: "0.35.0"
+        go-version: ["1.26", "1.27"]
+        tinygo-version: ["0.43.0"]
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version: ${{ matrix.go-version }}
 
       - name: Set up TinyGo
-        uses: acifani/setup-tinygo@v2
+        uses: acifani/setup-tinygo@v3
         with:
           tinygo-version: ${{ matrix.tinygo-version }}
 
@@ -144,11 +143,7 @@ jobs:
           version: ${{ env.wasmtime-version }}
 
       - name: Add Go wasm exec to $PATH
-        run: echo "$(go env GOROOT)/misc/wasm" >> $GITHUB_PATH
-
-      # This moved in Go 1.24: https://github.com/golang/go/issues/68024
-      - name: Add Go 1.24 wasm exec to $PATH
-        run: echo "$(go env GOROOT)/lib/wasm" >> $GITHUB_PATH
+        run: echo "$(go env GOROOT)/lib/wasm" >> "$GITHUB_PATH"
 
       - name: Regenerate Go
         run: make tests/generated
